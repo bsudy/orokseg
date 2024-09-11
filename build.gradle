@@ -3,6 +3,7 @@ plugins {
 	id 'org.springframework.boot' version '3.3.3'
 	id 'io.spring.dependency-management' version '1.1.6'
 	id "io.freefair.lombok" version "8.10"
+	id 'com.diffplug.spotless' version '6.25.0'
 }
 
 group = 'link.sudy.orokseg'
@@ -16,6 +17,13 @@ java {
 
 repositories {
 	mavenCentral()
+}
+
+spotless {
+	java {
+		target '**/*.java'
+		importOrder 'java,javax,org,com,link', 'static', 'all'
+	}
 }
 
 dependencies {
