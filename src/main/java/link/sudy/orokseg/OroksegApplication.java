@@ -11,6 +11,7 @@ import org.springframework.context.annotation.Bean;
 @SpringBootApplication
 public class OroksegApplication {
 
+
 	public static void main(String[] args) {
 		SpringApplication.run(OroksegApplication.class, args);
 	}
@@ -29,5 +30,7 @@ public class OroksegApplication {
 
 		};
 	}
+	 
+
 
 }
