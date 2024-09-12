@@ -6,6 +6,7 @@ import link.sudy.orokseg.model.Family;
 import link.sudy.orokseg.repository.FamilyRepository;
 import link.sudy.orokseg.serviices.converters.FamilyConverter;
 import lombok.val;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -20,8 +21,11 @@ public class FamilyService {
     }
 
 
-    public Iterable<Family> getFamilies() {
-        val families = this.familyRepository.findAll();
+    public Iterable<Family> getFamilies(
+        final int page,
+        final int pageSize
+    ) {
+        val families = this.familyRepository.findAll(Pageable.ofSize(pageSize).withPage(page));
         return StreamSupport.stream(families.spliterator(), false)
                 .map((dbFamily) -> {
                     return this.familyConverter.toAPIFamily(dbFamily);

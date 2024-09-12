@@ -5,6 +5,7 @@ import java.util.stream.StreamSupport;
 import link.sudy.orokseg.model.Person;
 import link.sudy.orokseg.repository.PersonRepository;
 import link.sudy.orokseg.serviices.converters.PersonConverter;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -19,8 +20,8 @@ public class PersonService {
         this.personConverter = personConverter;
     }
 
-    public Iterable<Person> getPeople() {
-        var personList = personRepository.findAll();
+    public Iterable<Person> getPeople(int page, int pageSize) {
+        var personList = personRepository.findAll(Pageable.ofSize(pageSize).withPage(page));
         return StreamSupport.stream(personList.spliterator(), false)
                 .map(p -> this.personConverter.toPerson(p))
                 .collect(Collectors.toList());
