@@ -11,7 +11,7 @@ version = '0.0.1-SNAPSHOT'
 
 java {
 	toolchain {
-		languageVersion = JavaLanguageVersion.of(17)
+		languageVersion = JavaLanguageVersion.of(21)
 	}
 }
 
@@ -29,10 +29,19 @@ spotless {
 dependencies {
 
 	implementation 'org.springframework.boot:spring-boot-starter'
+	implementation 'jakarta.inject:jakarta.inject-api:2.0.1'
+
 	implementation 'org.springframework.boot:spring-boot-starter-web'
+
+
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 	implementation 'org.xerial:sqlite-jdbc:3.46.1.0'
 	implementation 'org.hibernate.orm:hibernate-community-dialects'
+	implementation 'net.razorvine:pickle:1.5'
+
+	implementation 'org.python:jython-standalone:2.7.4'
+
+
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }

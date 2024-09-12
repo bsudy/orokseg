@@ -5,14 +5,16 @@ import jakarta.persistence.Convert;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.type.NumericBooleanConverter;
 
-@Entity
+@Entity(name = "person")
 @Getter
 @Setter
-public class Person {
+@AllArgsConstructor
+public class DBPerson {
     @Id
     @Setter(AccessLevel.PROTECTED)
     private String handle;
@@ -33,13 +35,12 @@ public class Person {
 
     private Integer change;
 
+    @Column(name = "blob_data")
+    @Setter(AccessLevel.NONE)
+    private byte[] blobData;
+
     @Column(name = "private")
     @Convert(converter = NumericBooleanConverter.class)
     private Boolean isPrivate;
-
-    // generate getters and setters
-
-
-
 
 }
