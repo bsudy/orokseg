@@ -1,12 +1,10 @@
-package link.sudy.orokseg.serviices;
+package link.sudy.orokseg.serviices.converters;
 
 import jakarta.inject.Singleton;
-import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
-
 import link.sudy.orokseg.model.Gender;
 import link.sudy.orokseg.model.Name;
 import link.sudy.orokseg.model.Person;
@@ -14,7 +12,6 @@ import link.sudy.orokseg.model.PersonRef;
 import link.sudy.orokseg.model.Surname;
 import link.sudy.orokseg.repository.model.DBPerson;
 import lombok.val;
-import net.razorvine.pickle.Unpickler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -24,17 +21,6 @@ import org.springframework.stereotype.Component;
 public class PersonConverter {
 
     private final static Logger logger = LoggerFactory.getLogger(PersonConverter.class);
-
-    public Object unpickle(byte[] blob) {
-        var pickle = new Unpickler();
-        try {
-            return (Object) pickle.loads(blob);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        } finally {
-            pickle.close();
-        }
-    }
     
     public Person toPerson(DBPerson dbPerson) {
         // return (
@@ -61,7 +47,7 @@ public class PersonConverter {
         //     [pr.serialize() for pr in self.person_ref_list],  # 20
         // )
         
-        val obj = unpickle(dbPerson.getBlobData());
+        val obj = PickleUtils.unpickle(dbPerson.getBlobData());
         logger.info("Converting person object: {}", obj);
         val parts = (Object[]) obj;
 
