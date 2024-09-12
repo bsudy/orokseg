@@ -1,5 +1,6 @@
 package link.sudy.orokseg.serviices;
 
+import java.util.Optional;
 import java.util.stream.StreamSupport;
 import link.sudy.orokseg.model.Family;
 import link.sudy.orokseg.repository.FamilyRepository;
@@ -30,11 +31,14 @@ public class FamilyService {
     
 
 
-    public Family getFamilyById(String id) {
-        return null;
+    public Optional<Family> getFamilyById(String id) {
+        return this.familyRepository.findByGrampsId(id)
+                .map((dbFamily) -> this.familyConverter.toAPIFamily(dbFamily));
     }
-
-    public Family getFamilyByHandle(String handle) {
-        return null;
+    
+    public Optional<Family> getFamilyByHandle(String handle) {
+        return this.familyRepository
+        .findById(handle)
+                .map((family) -> this.familyConverter.toAPIFamily(family));
     }
 }
