@@ -5,8 +5,10 @@ import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import link.sudy.orokseg.model.Family;
 import link.sudy.orokseg.model.Family.ChildRef;
+import link.sudy.orokseg.model.Note;
 import link.sudy.orokseg.model.Person;
 import link.sudy.orokseg.serviices.FamilyService;
+import link.sudy.orokseg.serviices.NoteService;
 import link.sudy.orokseg.serviices.PersonService;
 import org.springframework.graphql.data.method.annotation.Argument;
 import org.springframework.graphql.data.method.annotation.QueryMapping;
@@ -20,22 +22,30 @@ public class GraphQLResource {
     
     private PersonService personService;
     private FamilyService familyService;
+    private NoteService noteService;
     
-    public GraphQLResource(PersonService personService, FamilyService familyService) {
+    public GraphQLResource(PersonService personService, FamilyService familyService, NoteService noteService) {
         this.personService = personService;
         this.familyService = familyService;
+        this.noteService = noteService;
     }
 
     @QueryMapping
     public Person personById(@Argument String id) {
         LOGGER.info("Getting person by id: " + id);
-        return personService.getByGrampsId(id).orElse(null);
+        return personService.getByGrampsId(id).orElseThrow();
     }
 
     @QueryMapping
     public Family familyById(@Argument String id) {
         LOGGER.info("Getting family by id: " + id);
-        return familyService.getFamilyById(id).orElse(null);
+        return familyService.getFamilyById(id).orElseThrow();
+    }
+
+    @QueryMapping(name = "noteById")
+    public Note noteById(@Argument String id) {
+        LOGGER.info("Getting note by id: " + id);
+        return noteService.getNoteByGrampsId(id).orElseThrow();
     }
 
     @SchemaMapping
@@ -73,4 +83,13 @@ public class GraphQLResource {
                 .filter(family -> family != null)
                 .collect(Collectors.toList());
     } 
+
+    @SchemaMapping(typeName = "Person", field = "notes")
+    public Iterable<Note> children(Person person) {
+        LOGGER.info("Getting notes for person: " + person.getHandle());
+        return person.getNoteRefList().stream()
+                .map(childRef -> noteService.getNoteByHandle(childRef).orElse(null))
+                .filter(child -> child != null)
+                .collect(Collectors.toList());
+    }
 }

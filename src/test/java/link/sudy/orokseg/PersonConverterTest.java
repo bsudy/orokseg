@@ -5,7 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import java.util.Base64;
 import link.sudy.orokseg.model.Gender;
 import link.sudy.orokseg.repository.model.DBPerson;
-import link.sudy.orokseg.serviices.PersonConverter;
+import link.sudy.orokseg.serviices.converters.PersonConverter;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

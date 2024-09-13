@@ -14,26 +14,24 @@ public class PersonService {
     
 
     private PersonRepository personRepository;
-    private PersonConverter personConverter;
     
-    public PersonService(PersonRepository personRepository, PersonConverter personConverter) {
+    public PersonService(PersonRepository personRepository) {
         this.personRepository = personRepository;
-        this.personConverter = personConverter;
     }
 
     public Iterable<Person> getPersons(int page, int pageSize) {
         var personList = personRepository.findAll(Pageable.ofSize(pageSize).withPage(page));
         return StreamSupport.stream(personList.spliterator(), false)
-                .map(p -> this.personConverter.toPerson(p))
+                .map(p -> PersonConverter.toPerson(p))
                 .collect(Collectors.toList());
     }
 
     public Optional<Person> getByHandle(String id) {
-        return personRepository.findById(id).map(p -> this.personConverter.toPerson(p));
+        return personRepository.findById(id).map(p -> PersonConverter.toPerson(p));
     }
 
     public Optional<Person> getByGrampsId(String grampsId) {
-        return personRepository.findByGrampsId(grampsId).map(p -> this.personConverter.toPerson(p));
+        return personRepository.findByGrampsId(grampsId).map(p -> PersonConverter.toPerson(p));
     }
 
 }

@@ -22,6 +22,8 @@ public class Person {
     private List<String> familyRefList;
     private List<String> parentFamilyRefList;
 
+    private List<String> noteRefList;
+
     public String getDisplayName() {
         return name != null ? name.getDisplayName() : "<Unknown>";
     }

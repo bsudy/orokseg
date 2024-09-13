@@ -1,6 +1,5 @@
 package link.sudy.orokseg.serviices.converters;
 
-import jakarta.inject.Singleton;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
@@ -14,15 +13,12 @@ import link.sudy.orokseg.repository.model.DBPerson;
 import lombok.val;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Component;
 
-@Singleton
-@Component
 public class PersonConverter {
 
     private final static Logger logger = LoggerFactory.getLogger(PersonConverter.class);
     
-    public Person toPerson(DBPerson dbPerson) {
+    public static Person toPerson(DBPerson dbPerson) {
         // return (
         //     self.handle,  #  0
         //     self.gramps_id,  #  1
@@ -67,13 +63,15 @@ public class PersonConverter {
         logger.info("Converting names of person: {}", parts[4].getClass());
         logger.info("Converting names of person: {}", parts[4].getClass().isArray());
 
-        val alternateNames = toList(parts[4]).stream().map(this::toName)
+        val alternateNames = toList(parts[4]).stream().map(PersonConverter::toName)
                 .collect(Collectors.toList());
         // var deathRefIndex = (Integer) parts[5];
         // var birthRefIndex = (Integer) parts[6];
         // // var eventRefs = toStringList(parts[7]);
         val familyRefList = toStringList(parts[8]);
         val parentFamilyRefList = toStringList(parts[9]);
+
+        var noteRefList = toStringList(parts[16]); 
 
         // var isPrivate = toPrivacyBase(parts[19]);
         // var personRefs = toList(parts[20]).stream().map(this::toPersonRef)
@@ -89,13 +87,14 @@ public class PersonConverter {
             gender,
             alternateNames,
             familyRefList,
-            parentFamilyRefList
+            parentFamilyRefList,
+            noteRefList
             // obj,
             // blob64
         );
     }
 
-    public Name toName(Object obj) {
+    public static Name toName(Object obj) {
 
         logger.info("Converting name object: {}", obj);
 
@@ -120,7 +119,7 @@ public class PersonConverter {
         // )
         return new Name(
             Objects.toString(parts[4]),
-            toList(parts[5]).stream().map(this::toSurname)
+            toList(parts[5]).stream().map(PersonConverter::toSurname)
                 .collect(Collectors.toList()),
             Objects.toString(parts[6])
                     // Title
@@ -128,7 +127,7 @@ public class PersonConverter {
         );
     }
     
-    private Surname toSurname(Object obj) {
+    private static Surname toSurname(Object obj) {
         // return (
         //     self.surname,
         //     self.prefix,
@@ -144,7 +143,7 @@ public class PersonConverter {
         );
     }   
 
-    public List<Object> toList(Object obj) {
+    public static List<Object> toList(Object obj) {
         if (obj == null) {
             return List.of();
         }
@@ -157,7 +156,7 @@ public class PersonConverter {
         throw new RuntimeException("Cannot convert to list: " + obj);
     }
 
-    public List<String> toStringList(Object obj) {
+    public static List<String> toStringList(Object obj) {
         if (obj == null) {
             return List.of();
         }
@@ -175,7 +174,7 @@ public class PersonConverter {
     //     // )
     // }
     
-    public Object toPersonRef(Object obj) {
+    public static Object toPersonRef(Object obj) {
         // return (
         //     PrivacyBase.serialize(self),
         //     CitationBase.serialize(self),
@@ -192,7 +191,7 @@ public class PersonConverter {
         );
     }
 
-    public Boolean toPrivacyBase(Object obj) {
+    public static Boolean toPrivacyBase(Object obj) {
         if (obj == null) {
             return null;
         }

@@ -1,6 +1,7 @@
 type Query {
     personById(id: ID): Person
     familyById(id: ID): Family
+    noteById(id: ID): Note
 }
 
 type Person {
@@ -12,6 +13,7 @@ type Person {
     names: [Name]
     families: [Family]
     parentFamilies: [Family]
+    notes: [Note]
 }
 
 type Name {
@@ -58,4 +60,72 @@ enum ChildRelationType {
     FOSTER
     UNKNOWN
     CUSTOM
+}
+
+type Note {
+    grampsId: ID!
+    handle: String!
+    format: NoteFormat!
+    type: NoteType!
+    text: StyledText!
+    change: Int!
+    privacy: Boolean!
+}
+
+enum NoteFormat {
+    FLOWED, 
+    FORMATTED
+}
+
+type NoteType {
+    type: NoteTypeEnum!
+    value: String
+}
+
+enum NoteTypeEnum {
+    UNKNOWN
+    CUSTOM
+    GENERAL
+    RESEARCH
+    TRANSCRIPT
+    PERSON
+    ATTRIBUTE
+    ADDRESS
+    ASSOCIATION
+    LDS
+    FAMILY
+    EVENT
+    EVENTREF
+    SOURCE
+    SOURCEREF
+    PLACE
+    REPO
+    REPOREF
+    MEDIA
+    MEDIAREF
+    CHILDREF
+    PERSONNAME
+    SOURCE_TEXT
+    CITATION
+    REPORT_TEXT
+    HTML_CODE
+    TODO
+    LINK
+    ANALYSIS
+}
+
+type StyledText {
+    text: String!
+    tags: [StyledTextTag!]!
+}
+
+type StyledTextTag {
+    name: String!
+    value: String
+    ranges: [StyledTextRange]
+}
+
+type StyledTextRange {
+    start: Int!
+    end: Int!
 }

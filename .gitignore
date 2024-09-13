@@ -6,3 +6,4 @@ gradle.properties
 
 .vscode/
 .idea/
+.metals/

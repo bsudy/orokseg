@@ -1,0 +1,17 @@
+query getNoteById($id: ID!) {
+  noteById(id: $id) {
+    handle
+    grampsId
+    text {
+        text
+        tags {
+            name
+            value
+            ranges {
+                start
+                end
+            }
+        }
+    }
+  }
+}
