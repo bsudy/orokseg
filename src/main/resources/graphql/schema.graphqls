@@ -1,0 +1,61 @@
+type Query {
+    personById(id: ID): Person
+    familyById(id: ID): Family
+}
+
+type Person {
+    grampsId: ID
+    handle: String
+    displayName: String!
+    name: Name
+    gender: Gender
+    names: [Name]
+    families: [Family]
+    parentFamilies: [Family]
+}
+
+type Name {
+    displayName: String!
+    givenName: String
+    surnames: [Surname]
+    suffix: String
+}
+
+type Surname {
+    surname: String
+    prefix: String
+    primary: Boolean
+}
+
+enum Gender {
+    FEMALE
+    MALE
+    UNKNOWN
+}
+
+type Family {
+    grampsId: ID!
+    handle: String!
+    father: Person
+    mother: Person
+    children: [Child]    
+}
+
+type Child {
+    handle: String!
+    motherRelationType: ChildRelationType
+    fatherRelationType: ChildRelationType
+    person: Person
+    privacy: Boolean
+}
+
+enum ChildRelationType {
+    NONE
+    BIRTH
+    ADOPTED
+    STEPCHILD
+    SPONSORED
+    FOSTER
+    UNKNOWN
+    CUSTOM
+}

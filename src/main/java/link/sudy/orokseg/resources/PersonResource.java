@@ -4,6 +4,7 @@ import link.sudy.orokseg.model.Person;
 import link.sudy.orokseg.serviices.PersonService;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -27,7 +28,13 @@ public class PersonResource {
         if (pageSize > 500) {
             throw new IllegalArgumentException("Page size must be less than 300");
         }
-        return personService.getPeople(page, pageSize);
+        return personService.getPersons(page, pageSize);
     }
+
+    @GetMapping("/{id}")
+    public Person getById(@PathVariable String id) {
+        return personService.getByGrampsId(id).orElseThrow();
+    }
+
 
 }

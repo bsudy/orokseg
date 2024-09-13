@@ -28,17 +28,13 @@ public class Family {
     private Boolean privacy;
     
     private String blobJson;
-
-    public String getHello() {
-        return "Hello";
-    }
     
 
     @Getter
     @Setter(AccessLevel.PROTECTED)
     @AllArgsConstructor
     public static class ChildRef {
-        private String childHandle;
+        private String handle;
         private ChildRelationType motherRelationType;
         private ChildRelationType fatherRelationType;
         private List<String> citationHandleList;
