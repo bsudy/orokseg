@@ -1,5 +1,5 @@
 
 
 export class Person {
-    constructor(public grampsId: string, public givenName: string, public surname: string) { }
+    constructor(public grampsId: string, public handle: string, public displayName: string) { }
 }

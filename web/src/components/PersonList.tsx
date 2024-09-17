@@ -12,7 +12,7 @@ export const PersonList = ({ persons }: { persons: Person[] } ) => {
                         <ImageIcon />
                     </Avatar>
                     </ListItemAvatar>
-                    <ListItemText primary={`${person.surname}, ${person.givenName}`} secondary={ `${person.grampsId}` } />
+                    <ListItemText primary={`${person.displayName}`} secondary={ `${person.grampsId}` } />
                 </ListItem>
             )}
         </List>

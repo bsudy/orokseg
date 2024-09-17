@@ -42,7 +42,7 @@ public class GraphQLResource {
   public PersonList persons(@Argument Integer page, @Argument Integer pageSize) {
     LOGGER.info("Getting all persons");
     return personService.getPersons(
-        page != null ? page : 0,
+        page != null ? page : 1,
         // TODO page size should be set back to 500
         pageSize == null || pageSize > 500 ? 100 : pageSize);
   }

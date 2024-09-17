@@ -4,31 +4,36 @@ import { Client } from "../client/Client";
 import { Avatar, Box, Button, CircularProgress, List, ListItem, ListItemAvatar, ListItemText } from "@mui/material";
 import ImageIcon from '@mui/icons-material/Image';
 import { PersonList } from "../components/PersonList";
+import { useQuery } from "@apollo/client";
+import { GET_PERSON_LIST } from "../graphql/queries";
+
 
 
 export function Persons() {
 
-    const [persons, setPersons] = useState<Person[]>([]);
-    const [error, setError] = useState<string | null>(null);
-    const [loading, setLoading] = useState<boolean>(false);
+    // const [persons, setPersons] = useState<Person[]>([]);
+    // const [error, setError] = useState<string | null>(null);
+    // const [loading, setLoading] = useState<boolean>(false);
 
-    const load = () => {
-        setLoading(true);
-        setTimeout(() => {
-            new Client().getPersonList().then(persons => {
-                setPersons(persons);
-                setError(null);
-            }).catch(err => {
-                setError(err.message);
-            }).finally(() => {
-                setLoading(false);
-            });
-        }, 1000);
-    }
+    const { loading, error, data } = useQuery(GET_PERSON_LIST);
 
-    useEffect(() => {
-        load();
-    }, []);
+    // const load = () => {
+    //     setLoading(true);
+    //     setTimeout(() => {
+    //         new Client().getPersonList().then(persons => {
+    //             setPersons(persons);
+    //             setError(null);
+    //         }).catch(err => {
+    //             setError(err.message);
+    //         }).finally(() => {
+    //             setLoading(false);
+    //         });
+    //     }, 1000);
+    // }
+
+    // useEffect(() => {
+    //     load();
+    // }, []);
 
     return (
         <div>
@@ -36,10 +41,10 @@ export function Persons() {
             <Box sx={{ display: 'flex', alignItems: 'center', flexDirection: 'column' }}>
                 <h1>Person List</h1>
                 
-                {error && <p>Error: {error}</p>}
+                {error && <p>Error: {`${error}`}</p>}
                 <Box sx={{ m: 1, position: 'relative' }}>
 
-                    <Button variant="contained" onClick={load}>Refresh</Button>
+                    {/* <Button variant="contained" onClick={load}>Refresh</Button> */}
                     {loading && (
                         <CircularProgress
                         size={24}
@@ -54,7 +59,8 @@ export function Persons() {
                         ></CircularProgress>
                     )}
                 </Box>
-                <PersonList persons={persons} />
+                {data && <PersonList persons={data.persons.persons} />}
+                {/* <PersonList persons={persons} /> */}
             </Box>
 
         </div>
