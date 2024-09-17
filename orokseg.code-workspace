@@ -1,0 +1,29 @@
+{
+	"folders": [
+		{
+			"name": "API",
+			"path": "api"
+		},
+		{
+			"name": "Web",
+			"path": "web"
+		},
+		{
+			"name": "Main",
+			"path": "."
+		}
+	],
+	"settings": {
+		"java.configuration.updateBuildConfiguration": "interactive",
+		"files.watcherExclude": {
+			"**/target": true
+		},
+		"java.debug.settings.hotCodeReplace": "auto",
+		"java.compile.nullAnalysis.mode": "automatic"
+	},
+	"extensions": {
+		"recommendations": [
+			
+		]
+	}
+}
