@@ -29,6 +29,8 @@ services:
     volumes:
       - ./web:/app
       - /app/node_modules
+    environment:
+      - PORT=8081
     command: "sh -c 'yarn install --frozen-lockfile --non-interactive && yarn start --host 0.0.0.0'"
 
 
