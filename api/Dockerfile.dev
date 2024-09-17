@@ -1,0 +1,13 @@
+FROM gradle:8.10-jdk21
+
+ARG NEXUS_USERNAME
+ARG NEXUS_PASSWORD
+
+WORKDIR /home/gradle/app
+
+COPY --chown=gradle:gradle ./build.gradle /home/gradle/app/
+
+RUN gradle compileJava
+
+ENTRYPOINT ["gradle"]
+CMD ["bootrun"]

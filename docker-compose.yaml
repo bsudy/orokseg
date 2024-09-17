@@ -1,0 +1,38 @@
+version: "3.7"
+
+services:
+
+  rproxy:
+    image: nginx:1.25.4
+    restart: unless-stopped
+    ports:
+      - "8081:80"
+      # - "443:443"
+    volumes:
+      - ./docker/rproxy/nginx.conf:/etc/nginx/conf.d/default.conf
+      # - ./certs:/etc/nginx/certs
+
+  api:
+    build:
+      context: ./api
+      dockerfile: Dockerfile.dev
+    volumes:
+      - ./api:/home/gradle/app/
+      - gradle-dev-repo:/home/gradle/.gradle
+      - /home/gradle/app/.gradle
+      - /home/gradle/app/build
+
+  web:
+    build:
+      context: ./web
+      dockerfile: Dockerfile.dev
+    volumes:
+      - ./web:/web
+      - /app/node_modules
+    command: "sh -c 'yarn install --frozen-lockfile --non-interactive && yarn start --host 0.0.0.0'"
+
+
+
+volumes:
+  gradle-dev-repo:
+    driver: local
