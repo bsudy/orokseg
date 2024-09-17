@@ -16,59 +16,51 @@ import org.slf4j.Logger;
 
 public class NoteConverter {
 
-    private static final Logger LOGGER = org.slf4j.LoggerFactory.getLogger(NoteConverter.class);
-    
-    public static Note convertToNote(DBNote dbNote) {
-        val blobData = dbNote.getBlobData();
-        Object[] unpickledData = (Object[]) PickleUtils.unpickle(blobData);
+  private static final Logger LOGGER = org.slf4j.LoggerFactory.getLogger(NoteConverter.class);
 
-        var blob64 = Base64.getEncoder().encodeToString(dbNote.getBlobData());
-        LOGGER.info("Converting note object: {}", blob64);
+  public static Note convertToNote(DBNote dbNote) {
+    val blobData = dbNote.getBlobData();
+    Object[] unpickledData = (Object[]) PickleUtils.unpickle(blobData);
 
-        Note note = new Note();
-        note.setHandle((String) unpickledData[0]);
-        note.setGrampsId((String) unpickledData[1]);
-        note.setText(toStyledText(unpickledData[2]));
-        note.setFormat(NoteFormat.values()[(Integer) unpickledData[3]]);
-        note.setType(NoteConverter.toNoteType((Object[])unpickledData[4]));
-        note.setChange((Integer) unpickledData[5]);
-        // note.setTags((String) unpickledData[6]);
-        note.setPrivacy((Boolean) unpickledData[7]);
+    var blob64 = Base64.getEncoder().encodeToString(dbNote.getBlobData());
+    LOGGER.info("Converting note object: {}", blob64);
 
-        return note;
-    }
+    Note note = new Note();
+    note.setHandle((String) unpickledData[0]);
+    note.setGrampsId((String) unpickledData[1]);
+    note.setText(toStyledText(unpickledData[2]));
+    note.setFormat(NoteFormat.values()[(Integer) unpickledData[3]]);
+    note.setType(NoteConverter.toNoteType((Object[]) unpickledData[4]));
+    note.setChange((Integer) unpickledData[5]);
+    // note.setTags((String) unpickledData[6]);
+    note.setPrivacy((Boolean) unpickledData[7]);
 
-    public static NoteType toNoteType(Object[] parts) {
-        return new NoteType(
-            NoteTypeEnum.ofValue((Integer)parts[0]),
-            (String)parts[1]
-        );
-    }
+    return note;
+  }
 
-    private static StyledText toStyledText(Object obj) {
-        val parts = (Object[]) obj;
-        val text = (String) parts[0];
-        var tags = ((List<Object[]>) parts[1]).stream()
-        .map(NoteConverter::toStyledTextTag)
-        .collect(Collectors.toList());
+  public static NoteType toNoteType(Object[] parts) {
+    return new NoteType(NoteTypeEnum.ofValue((Integer) parts[0]), (String) parts[1]);
+  }
 
-        return new StyledText(
-            text,
-            tags
-        );
-    }
+  private static StyledText toStyledText(Object obj) {
+    val parts = (Object[]) obj;
+    val text = (String) parts[0];
+    var tags =
+        ((List<Object[]>) parts[1])
+            .stream().map(NoteConverter::toStyledTextTag).collect(Collectors.toList());
 
-    private static StyledTextTag toStyledTextTag(Object[] parts) {
+    return new StyledText(text, tags);
+  }
 
-        var rawRanges = (List<Object[]>) parts[2];
-        var ranges = rawRanges.stream()
-        .map(pair -> new StyledTextTagRange((Integer) pair[0], (Integer) pair[1]))
-        .collect(Collectors.toList());
+  private static StyledTextTag toStyledTextTag(Object[] parts) {
 
-        return new StyledTextTag(
-            StyledText.StyledTextTagType.fromValue((Integer) parts[0]),
-            (String) parts[1],
-            ranges
-        );
-    }
+    var rawRanges = (List<Object[]>) parts[2];
+    var ranges =
+        rawRanges.stream()
+            .map(pair -> new StyledTextTagRange((Integer) pair[0], (Integer) pair[1]))
+            .collect(Collectors.toList());
+
+    return new StyledTextTag(
+        StyledText.StyledTextTagType.fromValue((Integer) parts[0]), (String) parts[1], ranges);
+  }
 }

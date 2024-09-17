@@ -8,8 +8,9 @@ import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface FamilyRepository extends CrudRepository<DBFamily, String>, PagingAndSortingRepository<DBFamily, String> {
+public interface FamilyRepository
+    extends CrudRepository<DBFamily, String>, PagingAndSortingRepository<DBFamily, String> {
 
-    @Query("SELECT f FROM family f WHERE f.grampsId = :grampsId")
-    public Optional<DBFamily> findByGrampsId(String grampsId);
+  @Query("SELECT f FROM family f WHERE f.grampsId = :grampsId")
+  public Optional<DBFamily> findByGrampsId(String grampsId);
 }

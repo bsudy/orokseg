@@ -8,8 +8,9 @@ import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface NoteRepository extends CrudRepository<DBNote, String>, PagingAndSortingRepository<DBNote, String> {
+public interface NoteRepository
+    extends CrudRepository<DBNote, String>, PagingAndSortingRepository<DBNote, String> {
 
-    @Query("SELECT n FROM note n WHERE n.grampsId = :grampsId")
-    public Optional<DBNote> findByGrampsId(String grampsId);
+  @Query("SELECT n FROM note n WHERE n.grampsId = :grampsId")
+  public Optional<DBNote> findByGrampsId(String grampsId);
 }

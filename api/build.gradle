@@ -24,6 +24,7 @@ spotless {
 		target '**/*.java'
 		importOrder 'java,javax,org,com,link', 'static', 'all'
 		removeUnusedImports()
+		googleJavaFormat()
 	}
 }
 

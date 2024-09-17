@@ -7,14 +7,14 @@ import lombok.Getter;
 @AllArgsConstructor
 @Getter
 public class Event {
-    
-    @AllArgsConstructor
-    @Getter
-    public static class EventRef {
 
-        private List<String> citationHandleList;
-        private List<String> noteHandleList;
+  @AllArgsConstructor
+  @Getter
+  public static class EventRef {
 
-        private Boolean privacy;
-    }
+    private List<String> citationHandleList;
+    private List<String> noteHandleList;
+
+    private Boolean privacy;
+  }
 }

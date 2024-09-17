@@ -11,25 +11,27 @@ import lombok.val;
 import org.junit.jupiter.api.Test;
 
 public class NoteConverterTest {
-    
-    public static final String TEST_NOTE_B64 = "gASVUAAAAAAAAAAojBtmYWM0YTY4NjM2OTcxM2Q5Y2Q1NTE1OWFkYTmUjAVOMDAwMJSMDlRoaXMgaXMgYSBub3RllF2UhpRLAEsEjACUhpRKsvK2Zl2UiXSULg==";
 
-    public static final DBNote TEST_NOTE = new DBNote(
-        "fac4a686369713d9cd55159ada9",
-        Base64.getDecoder().decode(TEST_NOTE_B64),
-        "N0000",
-        0,
-        0,
-        0
-    );
-    @Test
-    public void testConvertNote() {
+  public static final String TEST_NOTE_B64 =
+      "gASVUAAAAAAAAAAojBtmYWM0YTY4NjM2OTcxM2Q5Y2Q1NTE1OWFkYTmUjAVOMDAwMJSMDlRoaXMgaXMgYSBub3RllF2UhpRLAEsEjACUhpRKsvK2Zl2UiXSULg==";
 
-        val note = NoteConverter.convertToNote(TEST_NOTE);
+  public static final DBNote TEST_NOTE =
+      new DBNote(
+          "fac4a686369713d9cd55159ada9",
+          Base64.getDecoder().decode(TEST_NOTE_B64),
+          "N0000",
+          0,
+          0,
+          0);
 
-        assertEquals("fac4a686369713d9cd55159ada9", note.getHandle());
-        assertEquals(NoteTypeEnum.PERSON, note.getType().getType());
-        assertEquals(NoteFormat.FLOWED, note.getFormat());
-        assertEquals("This is a note", note.getText().getText());
-    }
+  @Test
+  public void testConvertNote() {
+
+    val note = NoteConverter.convertToNote(TEST_NOTE);
+
+    assertEquals("fac4a686369713d9cd55159ada9", note.getHandle());
+    assertEquals(NoteTypeEnum.PERSON, note.getType().getType());
+    assertEquals(NoteFormat.FLOWED, note.getFormat());
+    assertEquals("This is a note", note.getText().getText());
+  }
 }

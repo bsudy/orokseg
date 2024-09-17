@@ -11,21 +11,20 @@ import lombok.Setter;
 @AllArgsConstructor
 public class Person {
 
-    private String handle;
-    private String grampsId;
-    private Name name;
+  private String handle;
+  private String grampsId;
+  private Name name;
 
-    private Gender gender;
+  private Gender gender;
 
-    private List<Name> names;
+  private List<Name> names;
 
-    private List<String> familyRefList;
-    private List<String> parentFamilyRefList;
+  private List<String> familyRefList;
+  private List<String> parentFamilyRefList;
 
-    private List<String> noteRefList;
+  private List<String> noteRefList;
 
-    public String getDisplayName() {
-        return name != null ? name.getDisplayName() : "<Unknown>";
-    }
-
+  public String getDisplayName() {
+    return name != null ? name.getDisplayName() : "<Unknown>";
+  }
 }

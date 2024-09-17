@@ -5,7 +5,7 @@ import lombok.Data;
 
 @Data
 public class PersonList {
-        
-    private final List<Person> persons;
-    private final Boolean hasMore;
+
+  private final List<Person> persons;
+  private final Boolean hasMore;
 }

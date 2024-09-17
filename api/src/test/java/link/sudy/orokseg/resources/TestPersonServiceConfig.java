@@ -9,8 +9,8 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class TestPersonServiceConfig {
 
-    @Bean
-    public PersonService personService(@Autowired PersonRepository personRepository) {
-        return new PersonService(personRepository);
-    }
+  @Bean
+  public PersonService personService(@Autowired PersonRepository personRepository) {
+    return new PersonService(personRepository);
+  }
 }

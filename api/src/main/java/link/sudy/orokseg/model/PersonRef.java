@@ -6,5 +6,5 @@ import lombok.Getter;
 @AllArgsConstructor
 @Getter
 public class PersonRef {
-    private Boolean isPrivate;
+  private Boolean isPrivate;
 }

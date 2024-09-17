@@ -17,23 +17,22 @@ import lombok.With;
 @With
 public class DBNote {
 
-    @Id
-    @Column(name = "handle", nullable = false, length = 50)
-    private String handle;
+  @Id
+  @Column(name = "handle", nullable = false, length = 50)
+  private String handle;
 
-    @Column(name = "blob_data")
-    private byte[] blobData;
+  @Column(name = "blob_data")
+  private byte[] blobData;
 
-    @Column(name = "gramps_id")
-    private String grampsId;
+  @Column(name = "gramps_id")
+  private String grampsId;
 
-    @Column(name = "format")
-    private Integer format;
+  @Column(name = "format")
+  private Integer format;
 
-    @Column(name = "change")
-    private Integer change;
+  @Column(name = "change")
+  private Integer change;
 
-    @Column(name = "private")
-    private Integer privateField;
-
+  @Column(name = "private")
+  private Integer privateField;
 }

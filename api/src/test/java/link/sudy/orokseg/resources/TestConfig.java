@@ -9,10 +9,10 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class TestConfig {
 
-    @Bean
-    public NoteService noteService(@Autowired NoteRepository noteRepository) {
-        return new NoteService(noteRepository);
-    }
+  @Bean
+  public NoteService noteService(@Autowired NoteRepository noteRepository) {
+    return new NoteService(noteRepository);
+  }
 
-    // Add other service beans as needed
+  // Add other service beans as needed
 }

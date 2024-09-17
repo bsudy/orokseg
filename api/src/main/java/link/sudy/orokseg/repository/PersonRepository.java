@@ -9,8 +9,8 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface PersonRepository
-        extends CrudRepository<DBPerson, String>, PagingAndSortingRepository<DBPerson, String> {
-    
-    @Query("SELECT p FROM person p WHERE p.grampsId = :grampsId")
-    Optional<DBPerson> findByGrampsId(String grampsId);
+    extends CrudRepository<DBPerson, String>, PagingAndSortingRepository<DBPerson, String> {
+
+  @Query("SELECT p FROM person p WHERE p.grampsId = :grampsId")
+  Optional<DBPerson> findByGrampsId(String grampsId);
 }

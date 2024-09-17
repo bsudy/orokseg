@@ -21,32 +21,29 @@ import org.springframework.graphql.test.tester.GraphQlTester;
 @Import(TestConfig.class)
 public class GraphQLResourceTest {
 
-    @Autowired
-    private GraphQlTester graphQlTester;
+  @Autowired private GraphQlTester graphQlTester;
 
-    @MockBean
-    NoteRepository noteRepositoryMock;
+  @MockBean NoteRepository noteRepositoryMock;
 
-    @MockBean
-    PersonService personService;
+  @MockBean PersonService personService;
 
-    @MockBean
-    FamilyService familyService;
+  @MockBean FamilyService familyService;
 
-    @Test
-    void shouldGetNoteByGrampsId() throws JsonMappingException, JsonProcessingException {
+  @Test
+  void shouldGetNoteByGrampsId() throws JsonMappingException, JsonProcessingException {
 
-        when(noteRepositoryMock.findByGrampsId(anyString()))
-                 .thenReturn(Optional.of(NoteConverterTest.TEST_NOTE));
+    when(noteRepositoryMock.findByGrampsId(anyString()))
+        .thenReturn(Optional.of(NoteConverterTest.TEST_NOTE));
 
-        this.graphQlTester
-				.documentName("getNoteById")
-				.variable("id", "N0000")
-                .execute()
-                .errors()
-                .verify()
-                .path("noteById")
-                .matchesJson("""
+    this.graphQlTester
+        .documentName("getNoteById")
+        .variable("id", "N0000")
+        .execute()
+        .errors()
+        .verify()
+        .path("noteById")
+        .matchesJson(
+            """
                 {
                     "handle": "fac4a686369713d9cd55159ada9",
                     "grampsId": "N0000",
@@ -56,5 +53,5 @@ public class GraphQLResourceTest {
                     }
                 }
                 """);
-    }
+  }
 }

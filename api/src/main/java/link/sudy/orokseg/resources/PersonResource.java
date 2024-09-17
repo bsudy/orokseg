@@ -14,34 +14,31 @@ import org.springframework.web.bind.annotation.RestController;
 @CrossOrigin(origins = "http://localhost:3000")
 public class PersonResource {
 
-    private PersonService personService;
-    
-    public PersonResource(PersonService personService) {
-        this.personService = personService;
+  private PersonService personService;
+
+  public PersonResource(PersonService personService) {
+    this.personService = personService;
+  }
+
+  @GetMapping
+  public Iterable<Person> getPeople(
+      @RequestParam(required = false, defaultValue = "1") final Integer page,
+      @RequestParam(required = false, defaultValue = "20") final Integer pageSize) {
+    if (pageSize > 500) {
+      throw new IllegalArgumentException("Page size must be less than 300");
+    }
+    if (pageSize < 1) {
+      throw new IllegalArgumentException("Page size must be greater than 0");
+    }
+    if (page < 1) {
+      throw new IllegalArgumentException("Page must be greater than 0");
     }
 
+    return personService.getPersons(page, pageSize).getPersons();
+  }
 
-    @GetMapping
-    public Iterable<Person> getPeople(
-            @RequestParam(required = false, defaultValue = "1") final Integer page,
-            @RequestParam(required = false, defaultValue = "20") final Integer pageSize) {
-        if (pageSize > 500) {
-            throw new IllegalArgumentException("Page size must be less than 300");
-        }
-        if (pageSize < 1) {
-            throw new IllegalArgumentException("Page size must be greater than 0");
-        }
-        if (page < 1) {
-            throw new IllegalArgumentException("Page must be greater than 0");
-        }
-
-        return personService.getPersons(page, pageSize).getPersons();
-    }
-
-    @GetMapping("/{id}")
-    public Person getById(@PathVariable String id) {
-        return personService.getByGrampsId(id).orElseThrow();
-    }
-
-
+  @GetMapping("/{id}")
+  public Person getById(@PathVariable String id) {
+    return personService.getByGrampsId(id).orElseThrow();
+  }
 }

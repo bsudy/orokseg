@@ -12,14 +12,13 @@ import lombok.val;
 @AllArgsConstructor
 public class Name {
 
-    private String givenName;
-    private List<Surname> surnames;
-    private String suffix;
+  private String givenName;
+  private List<Surname> surnames;
+  private String suffix;
 
-    public String getDisplayName() {
-        val surname = String.join(" ", surnames.stream().map(Surname::getSurname).toArray(String[]::new));
-        return String.format("%s, %s %s", surname, givenName, suffix);
-    }
-    
-    
+  public String getDisplayName() {
+    val surname =
+        String.join(" ", surnames.stream().map(Surname::getSurname).toArray(String[]::new));
+    return String.format("%s, %s %s", surname, givenName, suffix);
+  }
 }

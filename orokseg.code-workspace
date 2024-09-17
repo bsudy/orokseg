@@ -19,7 +19,8 @@
 			"**/target": true
 		},
 		"java.debug.settings.hotCodeReplace": "auto",
-		"java.compile.nullAnalysis.mode": "automatic"
+		"java.compile.nullAnalysis.mode": "automatic",
+		"editor.tabSize": 2
 	},
 	"extensions": {
 		"recommendations": [
