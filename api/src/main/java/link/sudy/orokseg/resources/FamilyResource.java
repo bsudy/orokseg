@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("families")
+@RequestMapping("/api/families")
 @CrossOrigin(origins = "http://localhost:3000")
 public class FamilyResource {
 
