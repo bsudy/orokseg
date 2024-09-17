@@ -7,6 +7,7 @@ import link.sudy.orokseg.model.Family;
 import link.sudy.orokseg.model.Family.ChildRef;
 import link.sudy.orokseg.model.Note;
 import link.sudy.orokseg.model.Person;
+import link.sudy.orokseg.model.PersonList;
 import link.sudy.orokseg.serviices.FamilyService;
 import link.sudy.orokseg.serviices.NoteService;
 import link.sudy.orokseg.serviices.PersonService;
@@ -37,6 +38,16 @@ public class GraphQLResource {
     }
 
     @QueryMapping
+    public PersonList persons(@Argument Integer page, @Argument Integer pageSize) {
+        LOGGER.info("Getting all persons");
+        return personService.getPersons(
+                page != null ? page : 0,
+                // TODO page size should be set back to 500
+                pageSize == null || pageSize > 500 ? 100 : pageSize
+            );
+    }
+
+    @QueryMapping
     public Family familyById(@Argument String id) {
         LOGGER.info("Getting family by id: " + id);
         return familyService.getFamilyById(id).orElseThrow();
@@ -47,6 +58,7 @@ public class GraphQLResource {
         LOGGER.info("Getting note by id: " + id);
         return noteService.getNoteByGrampsId(id).orElseThrow();
     }
+
 
     @SchemaMapping
     public Optional<Person> father(Family family) {
@@ -64,8 +76,8 @@ public class GraphQLResource {
         return personService.getByHandle(childRef.getHandle());
     }
 
-    @SchemaMapping(typeName = "Person")
-    public Iterable<Family> famillies(Person person) {
+    @SchemaMapping(typeName = "Person", field = "families")
+    public Iterable<Family> families(Person person) {
         LOGGER.info("Getting families for person: " + person.getHandle());
         LOGGER.info("Family refs: " + person.getFamilyRefList());
         return person.getFamilyRefList().stream()

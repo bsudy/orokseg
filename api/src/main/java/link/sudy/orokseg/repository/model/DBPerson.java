@@ -6,9 +6,11 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.With;
 import org.hibernate.type.NumericBooleanConverter;
 
 @Entity(name = "person")
@@ -16,6 +18,8 @@ import org.hibernate.type.NumericBooleanConverter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@With
+@Builder
 public class DBPerson {
     @Id
     @Setter(AccessLevel.PROTECTED)

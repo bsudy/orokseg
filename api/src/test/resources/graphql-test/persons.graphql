@@ -1,0 +1,8 @@
+query persons($page: Int, $pageSize: Int) {
+  persons(page: $page, pageSize: $pageSize) {
+    persons {
+      grampsId
+    }
+    hasMore
+  }
+}

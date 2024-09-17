@@ -1,7 +1,13 @@
 type Query {
-    personById(id: ID): Person
-    familyById(id: ID): Family
-    noteById(id: ID): Note
+    personById(id: ID!): Person
+    familyById(id: ID!): Family
+    noteById(id: ID!): Note
+    persons(page: Int, pageSize: Int): PersonList
+}
+
+type PersonList {
+    persons: [Person]
+    hasMore: Boolean
 }
 
 type Person {
@@ -40,7 +46,7 @@ type Family {
     handle: String!
     father: Person
     mother: Person
-    children: [Child]    
+    children: [Child]
 }
 
 type Child {

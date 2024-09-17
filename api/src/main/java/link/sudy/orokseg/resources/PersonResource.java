@@ -23,12 +23,19 @@ public class PersonResource {
 
     @GetMapping
     public Iterable<Person> getPeople(
-            @RequestParam(required = false, defaultValue = "0") final Integer page,
+            @RequestParam(required = false, defaultValue = "1") final Integer page,
             @RequestParam(required = false, defaultValue = "20") final Integer pageSize) {
         if (pageSize > 500) {
             throw new IllegalArgumentException("Page size must be less than 300");
         }
-        return personService.getPersons(page, pageSize);
+        if (pageSize < 1) {
+            throw new IllegalArgumentException("Page size must be greater than 0");
+        }
+        if (page < 1) {
+            throw new IllegalArgumentException("Page must be greater than 0");
+        }
+
+        return personService.getPersons(page, pageSize).getPersons();
     }
 
     @GetMapping("/{id}")

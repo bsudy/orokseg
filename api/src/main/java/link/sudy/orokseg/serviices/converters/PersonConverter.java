@@ -44,9 +44,14 @@ public class PersonConverter {
         // )
         
         val obj = PickleUtils.unpickle(dbPerson.getBlobData());
-        logger.info("Converting person object: {}", obj);
+        // logger.info("Converting person object: {}", obj);
         val parts = (Object[]) obj;
-
+        
+        // logger.info(
+        //     "Person: {}, Blog (b6): {}",
+        //     dbPerson.getGrampsId(),
+        //     Base64.getEncoder().encodeToString(dbPerson.getBlobData())
+        // );
         val handle = (String) parts[0];
         val grampsId = (String) parts[1];
         final Gender gender;
@@ -58,28 +63,24 @@ public class PersonConverter {
             gender = Gender.UNKNOWN;
         } 
         val primaryName = toName(parts[3]);
-
-        logger.info("Converting names of person: {}", parts[4]);
-        logger.info("Converting names of person: {}", parts[4].getClass());
-        logger.info("Converting names of person: {}", parts[4].getClass().isArray());
-
+        
         val alternateNames = toList(parts[4]).stream().map(PersonConverter::toName)
-                .collect(Collectors.toList());
+        .collect(Collectors.toList());
         // var deathRefIndex = (Integer) parts[5];
         // var birthRefIndex = (Integer) parts[6];
         // // var eventRefs = toStringList(parts[7]);
         val familyRefList = toStringList(parts[8]);
         val parentFamilyRefList = toStringList(parts[9]);
-
+        
         var noteRefList = toStringList(parts[16]); 
-
+        
         // var isPrivate = toPrivacyBase(parts[19]);
         // var personRefs = toList(parts[20]).stream().map(this::toPersonRef)
         //         .collect(Collectors.toList());
-
-
+        
+        
         // var blob64 = Base64.getEncoder().encodeToString(dbPerson.getBlobData());
-
+        
         return new Person(
             handle,
             grampsId,
