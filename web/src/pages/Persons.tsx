@@ -6,6 +6,7 @@ import ImageIcon from '@mui/icons-material/Image';
 import { PersonList } from "../components/PersonList";
 import { useQuery } from "@apollo/client";
 import { GET_PERSON_LIST } from "../graphql/queries";
+import { PersonListQuery } from "../gql/graphql";
 
 
 
@@ -15,7 +16,7 @@ export function Persons() {
     // const [error, setError] = useState<string | null>(null);
     // const [loading, setLoading] = useState<boolean>(false);
 
-    const { loading, error, data } = useQuery(GET_PERSON_LIST);
+    const { loading, error, data } = useQuery<PersonListQuery>(GET_PERSON_LIST);
 
     // const load = () => {
     //     setLoading(true);
@@ -59,7 +60,7 @@ export function Persons() {
                         ></CircularProgress>
                     )}
                 </Box>
-                {data && <PersonList persons={data.persons.persons} />}
+                {data && <PersonList persons={data.persons?.persons || []} />}
                 {/* <PersonList persons={persons} /> */}
             </Box>
 
