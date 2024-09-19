@@ -1,6 +1,9 @@
-# Getting Started with Create React App
+# Örökség Web
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+A React project that connect to the Örökség API and displays the data from the gramps database.
+
+The project is making use [Material UI](https://mui.com/material-ui/).
+The component can be found [here](https://mui.com/material-ui/all-components/)
 
 ## Available Scripts
 
