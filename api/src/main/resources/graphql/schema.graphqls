@@ -25,7 +25,7 @@ type Person {
 type Name {
     displayName: String!
     givenName: String
-    surnames: [Surname]
+    surnames: [Surname!]!
     suffix: String
 }
 

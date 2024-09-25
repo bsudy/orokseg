@@ -1,7 +1,4 @@
-import {
-  createBrowserRouter,
-  RouterProvider,
-} from "react-router-dom";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import "./App.css";
 import Home from "./pages/Home";
 import { Persons } from "./pages/Persons";
@@ -13,6 +10,7 @@ import {
   CssBaseline,
 } from "@mui/material";
 import { makeStyles } from "@material-ui/styles";
+import { Person } from "./pages/Person";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -39,6 +37,7 @@ function App() {
       path: "/people",
       element: <Persons />,
     },
+    { path: "/people/:grampsId", element: <Person /> },
   ]);
 
   return (
