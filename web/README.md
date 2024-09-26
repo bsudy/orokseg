@@ -5,6 +5,19 @@ A React project that connect to the Örökség API and displays the data from th
 The project is making use [Material UI](https://mui.com/material-ui/).
 The component can be found [here](https://mui.com/material-ui/all-components/)
 
+## Dockerized development environment
+
+TODO
+
+## API
+
+The server exposes GraphQL and REST api. The GraphQL API can be explored on GraphiQL UI: http://localhost:8081/graphiql?path=/graphql
+
+### Frontend
+
+The GraphQL queries are in the [queries.ts](web/src/graphql/queries.ts) file.
+Once the file is modified, the `yarn codegen` should be called in order to generate the types for the given query.
+
 ## Available Scripts
 
 In the project directory, you can run:

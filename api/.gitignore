@@ -2,3 +2,4 @@ bin/
 build/
 .metals/
 .gradle/
+.idea/
