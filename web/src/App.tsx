@@ -10,7 +10,7 @@ import {
   CssBaseline,
 } from "@mui/material";
 import { makeStyles } from "@material-ui/styles";
-import { Person } from "./pages/Person";
+import { Person, PersonViewType } from "./pages/Person";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -37,7 +37,14 @@ function App() {
       path: "/people",
       element: <Persons />,
     },
-    { path: "/people/:grampsId", element: <Person /> },
+    {
+      path: "/people/tree/:grampsId",
+      element: <Person type={PersonViewType.Tree} />,
+    },
+    {
+      path: "/people/:grampsId",
+      element: <Person type={PersonViewType.Details} />,
+    },
   ]);
 
   return (

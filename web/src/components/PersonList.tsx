@@ -1,6 +1,8 @@
 import {
   Avatar,
+  IconButton,
   List,
+  ListItem,
   ListItemAvatar,
   ListItemButton,
   ListItemText,
@@ -8,6 +10,8 @@ import {
 import ImageIcon from "@mui/icons-material/Image";
 import { Person } from "../gql/graphql";
 import { useNavigate } from "react-router-dom";
+import { AccountTree } from "@mui/icons-material";
+import { displayName } from "../utils/name";
 
 export const PersonList = ({ persons }: { persons: Person[] }) => {
   // This is not ideal here. It makes the component less reusable.
@@ -17,12 +21,25 @@ export const PersonList = ({ persons }: { persons: Person[] }) => {
     <List sx={{ width: "100%", maxWidth: 360, bgcolor: "background.paper" }}>
       {persons &&
         persons.map((person) => (
-          <ListItemButton
+          <ListItem
             key={person.grampsId}
             onClick={(evt) => {
               evt.preventDefault();
               navigate("/people/" + person.grampsId);
             }}
+            secondaryAction={
+              <IconButton
+                edge="end"
+                aria-label="tree"
+                onClick={(evt) => {
+                  evt.preventDefault();
+                  evt.stopPropagation();
+                  navigate("/people/tree/" + person.grampsId);
+                }}
+              >
+                <AccountTree />
+              </IconButton>
+            }
           >
             <ListItemAvatar>
               <Avatar>
@@ -30,10 +47,10 @@ export const PersonList = ({ persons }: { persons: Person[] }) => {
               </Avatar>
             </ListItemAvatar>
             <ListItemText
-              primary={`${person.displayName}`}
+              primary={displayName(person?.name)}
               secondary={`${person.grampsId}`}
             />
-          </ListItemButton>
+          </ListItem>
         ))}
     </List>
   );

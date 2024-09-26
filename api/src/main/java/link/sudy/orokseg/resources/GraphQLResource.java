@@ -66,7 +66,7 @@ public class GraphQLResource {
 
   @SchemaMapping
   public Optional<Person> mother(Family family) {
-    return personService.getByHandle(family.getFatherHandle());
+    return personService.getByHandle(family.getMotherHandle());
   }
 
   @SchemaMapping(typeName = "Child", field = "person")

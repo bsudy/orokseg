@@ -11,15 +11,15 @@ type PersonList {
 }
 
 type Person {
-    grampsId: ID
-    handle: String
+    grampsId: ID!
+    handle: String!
     displayName: String!
     name: Name
     gender: Gender
     names: [Name]
-    families: [Family]
-    parentFamilies: [Family]
-    notes: [Note]
+    families: [Family!]
+    parentFamilies: [Family!]
+    notes: [Note!]
 }
 
 type Name {
@@ -46,7 +46,7 @@ type Family {
     handle: String!
     father: Person
     mother: Person
-    children: [Child]
+    children: [Child!]
 }
 
 type Child {

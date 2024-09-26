@@ -15,6 +15,7 @@ import {
 import Select from "@mui/material/Select";
 import { Edit, Restore, Save as SaveIcon } from "@mui/icons-material";
 import { useFormik } from "formik";
+import { displayName } from "../utils/name";
 
 type PersonD = PersonQuery["personById"];
 
@@ -54,7 +55,7 @@ const PersonDetails: React.FC<PersonDetailsProps> = ({ person }) => {
     <form onSubmit={formik.handleSubmit}>
       <Box sx={{ flexDirection: "column", display: "flex" }}>
         <Typography variant="h2" component="h2">
-          {formik.values.displayName}
+          {displayName(formik.values.name)}
           {editing ? (
             <>
               <Box sx={{ m: 1, position: "relative", display: "inline-block" }}>

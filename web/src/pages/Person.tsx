@@ -4,12 +4,22 @@ import { GET_PERSON } from "../graphql/queries";
 import { PersonQuery } from "../gql/graphql";
 import PersonDetails from "../components/PersonDetails.";
 import { useParams } from "react-router-dom";
+import { PersonTree } from "../components/PersonTree";
 
 type PersonParams = {
   grampsId: string;
 };
 
-export function Person() {
+export enum PersonViewType {
+  Details,
+  Tree,
+}
+
+type PersonProps = {
+  type: PersonViewType;
+};
+
+export function Person({ type }: PersonProps) {
   const { grampsId } = useParams<PersonParams>();
 
   const { loading, error, data } = useQuery<PersonQuery>(GET_PERSON, {
@@ -47,7 +57,12 @@ export function Person() {
             ></CircularProgress>
           )}
         </Box>
-        {data && <PersonDetails person={data.personById!} />}
+        {data &&
+          (type === PersonViewType.Details ? (
+            <PersonDetails person={data.personById!} />
+          ) : (
+            <PersonTree person={data.personById!} />
+          ))}
         {/* <PersonList persons={persons} /> */}
       </Box>
     </div>

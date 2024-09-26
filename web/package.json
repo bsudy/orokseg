@@ -17,6 +17,11 @@
     "@types/node": "^16.7.13",
     "@types/react": "^18.0.0",
     "@types/react-dom": "^18.0.0",
+    "d3-array": "^3.2.4",
+    "d3-flextree": "^2.1.2",
+    "d3-hierarchy": "^3.1.2",
+    "d3-selection": "^3.0.0",
+    "d3-transition": "^3.0.1",
     "formik": "^2.4.6",
     "formik-mui": "^5.0.0-alpha.1",
     "formik-mui-x-date-pickers": "^2.0.0-alpha.0",
@@ -25,6 +30,7 @@
     "react-dom": "^18.3.1",
     "react-router-dom": "^6.26.2",
     "react-scripts": "5.0.1",
+    "topola": "^3.7.0",
     "typescript": "^4.4.2",
     "web-vitals": "^2.1.0"
   },
@@ -60,6 +66,12 @@
     "@graphql-codegen/introspection": "4.0.3",
     "@graphql-codegen/typescript": "^4.0.9",
     "@graphql-codegen/typescript-resolvers": "^4.2.1",
+    "@types/d3-array": "^3.2.1",
+    "@types/d3-flextree": "^2.1.4",
+    "@types/d3-hierarchy": "^3.1.7",
+    "@types/d3-selection": "^3.0.10",
+    "@types/d3-transition": "^3.0.8",
+    "@types/d3-zoom": "^3.0.8",
     "prettier": "^3.3.3"
   }
 }

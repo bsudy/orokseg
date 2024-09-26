@@ -1,18 +1,5 @@
 import { gql } from "@apollo/client";
 
-export const GET_PERSON_LIST = gql`
-  query personList {
-    persons {
-      persons {
-        grampsId
-        handle
-        displayName
-      }
-      hasMore
-    }
-  }
-`;
-
 export const NAME_FIELDS = gql`
   fragment NameFields on Name {
     givenName
@@ -30,10 +17,23 @@ export const PERSON_FIELDS = gql`
   ${NAME_FIELDS}
   fragment PersonFields on Person {
     grampsId
+    handle
     displayName
     gender
     name {
       ...NameFields
+    }
+  }
+`;
+
+export const GET_PERSON_LIST = gql`
+  ${PERSON_FIELDS}
+  query personList {
+    persons {
+      persons {
+        ...PersonFields
+      }
+      hasMore
     }
   }
 `;
@@ -78,6 +78,16 @@ export const GET_PERSON = gql`
           }
         }
       }
+      parentFamilies {
+        grampsId
+        handle
+        father {
+          ...PersonFields
+        }
+        mother {
+          ...PersonFields
+        }
+      }
       families {
         grampsId
         handle
@@ -101,6 +111,9 @@ export const GET_PERSON = gql`
           }
         }
         father {
+          ...PersonFields
+        }
+        mother {
           ...PersonFields
         }
       }
