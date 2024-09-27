@@ -19,4 +19,8 @@ public class MediaService {
   public Optional<Medium> getMediumByHandle(String handle) {
     return this.mediaRepository.findById(handle).map((family) -> MediaConverter.toMedium(family));
   }
+
+  public Optional<Medium> getMediumByGrampsId(String grampsId) {
+    return this.mediaRepository.findByGrampsId(grampsId).map((family) -> MediaConverter.toMedium(family));
+  }
 }

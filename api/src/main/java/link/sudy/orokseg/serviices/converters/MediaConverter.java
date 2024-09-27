@@ -40,6 +40,6 @@ public class MediaConverter {
 
   public static Medium toMedium(DBMedium dbMedia) {
     return new Medium(
-        dbMedia.getHandle(), dbMedia.getGrampsId(), dbMedia.getMime(), dbMedia.getDescription());
+        dbMedia.getHandle(), dbMedia.getGrampsId(), dbMedia.getMime(), dbMedia.getDescription(), dbMedia.getPath());
   }
 }

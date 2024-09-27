@@ -9,6 +9,11 @@ public class Medium {
   private final String grampsId;
   private final String mime;
   private final String description;
+  private final String path;
+
+  public String getContentUrl() {
+    return "/api/media/" + grampsId + "/content";
+  }
 
   @Data
   public static class Rectangle {

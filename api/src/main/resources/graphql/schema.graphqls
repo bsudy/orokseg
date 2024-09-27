@@ -28,6 +28,7 @@ type Medium {
     grampsId: String!
     mime: String
     description: String
+    contentUrl: String!
 }
 
 type MediumRef {
