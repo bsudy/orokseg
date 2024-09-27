@@ -23,6 +23,22 @@ export const PERSON_FIELDS = gql`
     name {
       ...NameFields
     }
+    mediumRefs {
+      handle
+      rectangle {
+        x1
+        y1
+        x2
+        y2
+      }
+      medium {
+        handle
+        grampsId
+        mime
+        description
+        contentUrl
+      }
+    }
   }
 `;
 
@@ -38,40 +54,26 @@ export const GET_PERSON_LIST = gql`
   }
 `;
 
+// parentFamilies {
+//   grampsId
+//   handle
+//   children {
+//     handle
+//     motherRelationType
+//     fatherRelationType
+//     privacy
+//     person {
+//       ...PersonFields
+//     }
+//   }
+// }
+
 export const GET_PERSON = gql`
   ${PERSON_FIELDS}
   query person($grampsId: ID!) {
     personById(id: $grampsId) {
       ...PersonFields
-      parentFamilies {
-        grampsId
-        handle
-        children {
-          handle
-          motherRelationType
-          fatherRelationType
-          privacy
-          person {
-            ...PersonFields
-          }
-        }
-      }
-      mediumRefs {
-        handle
-        rectangle {
-          x1
-          y1
-          x2
-          y2
-        }
-        medium {
-          handle
-          grampsId
-          mime
-          description
-          contentUrl
-        }
-      }
+
       notes {
         handle
         grampsId
@@ -128,9 +130,29 @@ export const GET_PERSON = gql`
         }
         father {
           ...PersonFields
+          parentFamilies {
+            grampsId
+            handle
+            father {
+              ...PersonFields
+            }
+            mother {
+              ...PersonFields
+            }
+          }
         }
         mother {
           ...PersonFields
+          parentFamilies {
+            grampsId
+            handle
+            father {
+              ...PersonFields
+            }
+            mother {
+              ...PersonFields
+            }
+          }
         }
       }
     }

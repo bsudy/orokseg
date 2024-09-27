@@ -69,11 +69,17 @@ public class GraphQLResource {
 
   @SchemaMapping
   public Optional<Person> father(Family family) {
+    if (family.getFatherHandle() == null) {
+      return Optional.empty();
+    }
     return personService.getByHandle(family.getFatherHandle());
   }
 
   @SchemaMapping
   public Optional<Person> mother(Family family) {
+    if (family.getMotherHandle() == null) {
+      return Optional.empty();
+    }
     return personService.getByHandle(family.getMotherHandle());
   }
 

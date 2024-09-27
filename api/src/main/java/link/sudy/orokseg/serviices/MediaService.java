@@ -21,6 +21,8 @@ public class MediaService {
   }
 
   public Optional<Medium> getMediumByGrampsId(String grampsId) {
-    return this.mediaRepository.findByGrampsId(grampsId).map((family) -> MediaConverter.toMedium(family));
+    return this.mediaRepository
+        .findByGrampsId(grampsId)
+        .map((family) -> MediaConverter.toMedium(family));
   }
 }

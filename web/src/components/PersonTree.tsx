@@ -94,7 +94,11 @@ async function toImg(mediumRef: MediumRef): Promise<JsonImage> {
 
 async function toTopolaIndi(person: Person): Promise<JsonIndi> {
   const images = [];
-  if (person.mediumRefs) {
+  if (
+    person.mediumRefs &&
+    person.mediumRefs.length > 0 &&
+    person.mediumRefs[0]
+  ) {
     images.push(await toImg(person.mediumRefs[0]));
   }
   return {
@@ -120,6 +124,29 @@ async function toTopolaData(person: Person): Promise<JsonGedcomData> {
     }
   }
 
+  async function processParentFamily(person?: Person | Maybe<Person>) {
+    if (!person) {
+      return;
+    }
+    return await Promise.all(
+      (person.parentFamilies || []).map(async (family) => {
+        if (!Object.keys(fams).includes(family.grampsId)) {
+          fams[family.grampsId] = {
+            id: family.grampsId,
+            husb: family.father?.grampsId,
+            wife: family.mother?.grampsId,
+            children: family.children
+              ?.map((child) => child.person?.grampsId)
+              .filter((id) => id !== undefined) as string[] | undefined,
+          };
+          await processPerson(family.father);
+          await processPerson(family.mother);
+        }
+        indis[person.grampsId].famc = family.grampsId;
+      }),
+    );
+  }
+
   await processPerson(person);
   await Promise.all(
     (person.families || []).map(async (family) => {
@@ -133,7 +160,9 @@ async function toTopolaData(person: Person): Promise<JsonGedcomData> {
             .filter((id) => id !== undefined) as string[] | undefined,
         };
         await processPerson(family.father);
+        await processParentFamily(family.father);
         await processPerson(family.mother);
+        await processParentFamily(family.mother);
       }
 
       await Promise.all(
@@ -152,23 +181,25 @@ async function toTopolaData(person: Person): Promise<JsonGedcomData> {
     }),
   );
 
-  await Promise.all(
-    (person.parentFamilies || []).map(async (family) => {
-      if (!Object.keys(fams).includes(family.grampsId)) {
-        fams[family.grampsId] = {
-          id: family.grampsId,
-          husb: family.father?.grampsId,
-          wife: family.mother?.grampsId,
-          children: family.children
-            ?.map((child) => child.person?.grampsId)
-            .filter((id) => id !== undefined) as string[] | undefined,
-        };
-        await processPerson(family.father);
-        await processPerson(family.mother);
-      }
-      indis[person.grampsId].famc = family.grampsId;
-    }),
-  );
+  await processParentFamily(person);
+
+  // await Promise.all(
+  //   (person.parentFamilies || []).map(async (family) => {
+  //     if (!Object.keys(fams).includes(family.grampsId)) {
+  //       fams[family.grampsId] = {
+  //         id: family.grampsId,
+  //         husb: family.father?.grampsId,
+  //         wife: family.mother?.grampsId,
+  //         children: family.children
+  //           ?.map((child) => child.person?.grampsId)
+  //           .filter((id) => id !== undefined) as string[] | undefined,
+  //       };
+  //       await processPerson(family.father);
+  //       await processPerson(family.mother);
+  //     }
+  //     indis[person.grampsId].famc = family.grampsId;
+  //   }),
+  // );
 
   const topolaData = {
     indis: Object.values(indis),
