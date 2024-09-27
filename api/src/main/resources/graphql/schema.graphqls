@@ -20,13 +20,21 @@ type Person {
     families: [Family!]
     parentFamilies: [Family!]
     notes: [Note!]
-    media: [MediaRef!]
+    mediumRefs: [MediumRef!]
 }
 
-type MediaRef {
+type Medium {
+    handle: String!
+    grampsId: String!
+    mime: String
+    description: String
+}
+
+type MediumRef {
     handle: String!
     # notes: [Note!]
     rectangle: Rectangle
+    medium: Medium!
 }
 
 type Rectangle {

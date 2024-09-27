@@ -3,7 +3,12 @@ package link.sudy.orokseg.model;
 import java.util.List;
 import lombok.Data;
 
-public class Media {
+@Data
+public class Medium {
+  private final String handle;
+  private final String grampsId;
+  private final String mime;
+  private final String description;
 
   @Data
   public static class Rectangle {
@@ -14,7 +19,7 @@ public class Media {
   }
 
   @Data
-  public static class MediaRef {
+  public static class MediumRef {
 
     // RefBase.serialize(self),
     private final String handle;
