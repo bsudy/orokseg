@@ -20,6 +20,20 @@ type Person {
     families: [Family!]
     parentFamilies: [Family!]
     notes: [Note!]
+    media: [MediaRef!]
+}
+
+type MediaRef {
+    handle: String!
+    # notes: [Note!]
+    rectangle: Rectangle
+}
+
+type Rectangle {
+    x1: Int!
+    y1: Int!
+    x2: Int!
+    y2: Int!
 }
 
 type Name {

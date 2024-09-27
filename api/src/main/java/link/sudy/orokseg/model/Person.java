@@ -24,6 +24,8 @@ public class Person {
 
   private List<String> noteRefList;
 
+  private List<Media.MediaRef> media;
+
   public String getDisplayName() {
     return name != null ? name.getDisplayName() : "<Unknown>";
   }

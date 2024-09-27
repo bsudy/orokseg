@@ -69,10 +69,12 @@ public class PersonConverter {
     // var deathRefIndex = (Integer) parts[5];
     // var birthRefIndex = (Integer) parts[6];
     // // var eventRefs = toStringList(parts[7]);
-    val familyRefList = toStringList(parts[8]);
-    val parentFamilyRefList = toStringList(parts[9]);
+    val familyRefList = ConversionUtils.toStringList(parts[8]);
+    val parentFamilyRefList = ConversionUtils.toStringList(parts[9]);
+    var mediaRefList =
+        toList(parts[10]).stream().map(MediaConverter::toMediaRef).collect(Collectors.toList());
 
-    var noteRefList = toStringList(parts[16]);
+    var noteRefList = ConversionUtils.toStringList(parts[16]);
 
     // var isPrivate = toPrivacyBase(parts[19]);
     // var personRefs = toList(parts[20]).stream().map(this::toPersonRef)
@@ -88,7 +90,8 @@ public class PersonConverter {
         alternateNames,
         familyRefList,
         parentFamilyRefList,
-        noteRefList
+        noteRefList,
+        mediaRefList
         // obj,
         // blob64
         );
@@ -149,13 +152,6 @@ public class PersonConverter {
       return (List<Object>) obj;
     }
     throw new RuntimeException("Cannot convert to list: " + obj);
-  }
-
-  public static List<String> toStringList(Object obj) {
-    if (obj == null) {
-      return List.of();
-    }
-    return toList(obj).stream().map(Object::toString).collect(Collectors.toList());
   }
 
   // public static Object toMediaRef(Object obj) {
