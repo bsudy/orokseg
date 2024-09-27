@@ -56,6 +56,22 @@ export const GET_PERSON = gql`
           }
         }
       }
+      mediumRefs {
+        handle
+        rectangle {
+          x1
+          y1
+          x2
+          y2
+        }
+        medium {
+          handle
+          grampsId
+          mime
+          description
+          contentUrl
+        }
+      }
       notes {
         handle
         grampsId

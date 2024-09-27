@@ -1,5 +1,5 @@
 import { useEffect, useRef } from "react";
-import { Person } from "../gql/graphql";
+import { MediumRef, Person } from "../gql/graphql";
 import * as topola from "topola";
 
 import { generateQuerySelectorFor } from "../utils/dom";
@@ -16,6 +16,7 @@ import {
   JsonIndi,
 } from "topola";
 import { useNavigate } from "react-router-dom";
+import { getCutout } from "../utils/medium";
 // import {
 //   D3ZoomEvent,
 //   zoom,
@@ -60,8 +61,6 @@ const data = {
           year: 1509,
         },
       },
-      imageUrl:
-        "https://upload.wikimedia.org/wikipedia/commons/b/b3/Lady_Margaret_Beaufort_from_NPG.jpg",
     },
   ],
   fams: [
@@ -86,73 +85,90 @@ interface PersonTreeProps {
   person: Person;
 }
 
-function toTopolaIndi(person: Person): JsonIndi {
+async function toImg(mediumRef: MediumRef): Promise<JsonImage> {
+  return {
+    url: await getCutout(mediumRef),
+    title: mediumRef.medium.description || "",
+  };
+}
+
+async function toTopolaIndi(person: Person): Promise<JsonIndi> {
+  const images = [];
+  if (person.mediumRefs) {
+    images.push(await toImg(person.mediumRefs[0]));
+  }
   return {
     id: person.grampsId,
     firstName: displayFirstname(person.name),
     lastName: displaySurname(person.name),
     // famc: null,
     fams: [],
-    images: [], // { url, title}
+    images,
   };
 }
 
-function toTopolaData(person: Person) {
-  const indis = {} as Record<string, any>;
-  const fams = {} as Record<string, any>;
+async function toTopolaData(person: Person): Promise<JsonGedcomData> {
+  const indis = {} as Record<string, JsonIndi>;
+  const fams = {} as Record<string, JsonFam>;
 
-  function processPerson(person?: Person | Maybe<Person>) {
+  async function processPerson(person?: Person | Maybe<Person>) {
     if (!person) {
       return;
     }
     if (!Object.keys(indis).includes(person.grampsId)) {
-      indis[person.grampsId] = toTopolaIndi(person);
+      indis[person.grampsId] = await toTopolaIndi(person);
     }
   }
 
-  processPerson(person);
-  person.families?.forEach((family) => {
-    if (!Object.keys(fams).includes(family.grampsId)) {
-      fams[family.grampsId] = {
-        id: family.grampsId,
-        husb: family.father?.grampsId,
-        wife: family.mother?.grampsId,
-        children: family.children
-          ?.map((child) => child.person?.grampsId)
-          .filter((id) => id),
-      };
-      processPerson(family.father);
-      processPerson(family.mother);
-    }
-
-    family.children?.forEach((child) => {
-      if (
-        child.person &&
-        !Object.keys(indis).includes(child.person?.grampsId)
-      ) {
-        processPerson(child.person!);
+  await processPerson(person);
+  await Promise.all(
+    (person.families || []).map(async (family) => {
+      if (!Object.keys(fams).includes(family.grampsId)) {
+        fams[family.grampsId] = {
+          id: family.grampsId,
+          husb: family.father?.grampsId,
+          wife: family.mother?.grampsId,
+          children: family.children
+            ?.map((child) => child.person?.grampsId)
+            .filter((id) => id !== undefined) as string[] | undefined,
+        };
+        await processPerson(family.father);
+        await processPerson(family.mother);
       }
-      indis[child.person!.grampsId].famc = family.grampsId;
-    });
-    // TODO what if not single parents? Shall we take the first one.
-    indis[person.grampsId].fams.push(family.grampsId);
-  });
 
-  person.parentFamilies?.forEach((family) => {
-    if (!Object.keys(fams).includes(family.grampsId)) {
-      fams[family.grampsId] = {
-        id: family.grampsId,
-        husb: family.father?.grampsId,
-        wife: family.mother?.grampsId,
-        children: family.children
-          ?.map((child) => child.person?.grampsId)
-          .filter((id) => id),
-      };
-      processPerson(family.father);
-      processPerson(family.mother);
-    }
-    indis[person.grampsId].famc = family.grampsId;
-  });
+      await Promise.all(
+        (family.children || []).map(async (child) => {
+          if (
+            child.person &&
+            !Object.keys(indis).includes(child.person?.grampsId)
+          ) {
+            await processPerson(child.person!);
+          }
+          indis[child.person!.grampsId].famc = family.grampsId;
+        }),
+      );
+      // TODO what if not single parents? Shall we take the first one.
+      indis[person.grampsId].fams?.push(family.grampsId);
+    }),
+  );
+
+  await Promise.all(
+    (person.parentFamilies || []).map(async (family) => {
+      if (!Object.keys(fams).includes(family.grampsId)) {
+        fams[family.grampsId] = {
+          id: family.grampsId,
+          husb: family.father?.grampsId,
+          wife: family.mother?.grampsId,
+          children: family.children
+            ?.map((child) => child.person?.grampsId)
+            .filter((id) => id !== undefined) as string[] | undefined,
+        };
+        await processPerson(family.father);
+        await processPerson(family.mother);
+      }
+      indis[person.grampsId].famc = family.grampsId;
+    }),
+  );
 
   const topolaData = {
     indis: Object.values(indis),
@@ -171,7 +187,7 @@ export const PersonTree = ({ person }: PersonTreeProps) => {
   const svgRef = useRef<SVGGElement>(null);
   console.log("PersonTree component for", person.grampsId);
 
-  const renderChart = () => {
+  async function renderChart() {
     console.log("PersonTree inital render for", person.grampsId);
     if (!svgRef.current) {
       console.error("svgRef is not set");
@@ -182,7 +198,7 @@ export const PersonTree = ({ person }: PersonTreeProps) => {
 
     if (!chartRef.current) {
       const chart = topola.createChart({
-        json: toTopolaData(person),
+        json: await toTopolaData(person),
         chartType: topola.HourglassChart,
         renderer: topola.DetailedRenderer,
         animate: true,
@@ -196,7 +212,7 @@ export const PersonTree = ({ person }: PersonTreeProps) => {
       });
       chartRef.current = chart;
     } else {
-      chartRef.current.setData(toTopolaData(person));
+      chartRef.current.setData(await toTopolaData(person));
     }
 
     const chartInfo = chartRef.current.render();
@@ -241,7 +257,7 @@ export const PersonTree = ({ person }: PersonTreeProps) => {
       "transform",
       `translate(${offsetX / scale}px, ${offsetY / scale}px)`,
     );
-  };
+  }
 
   useEffect(() => {
     console.log("PersonTree render for", person.grampsId);

@@ -2,7 +2,7 @@ import { Box, CircularProgress, Typography } from "@mui/material";
 import { useQuery } from "@apollo/client";
 import { GET_PERSON } from "../graphql/queries";
 import { PersonQuery } from "../gql/graphql";
-import PersonDetails from "../components/PersonDetails.";
+import PersonDetails from "../components/PersonDetails";
 import { useParams } from "react-router-dom";
 import { PersonTree } from "../components/PersonTree";
 

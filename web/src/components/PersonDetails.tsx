@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Gender, PersonQuery, Person } from "../gql/graphql";
+import { Gender, Person } from "../gql/graphql";
 import { NameField } from "./NameField";
 import { sleep } from "../utils";
 import {
@@ -16,8 +16,7 @@ import Select from "@mui/material/Select";
 import { Edit, Restore, Save as SaveIcon } from "@mui/icons-material";
 import { useFormik } from "formik";
 import { displayName } from "../utils/name";
-
-type PersonD = PersonQuery["personById"];
+import { MediumPreview } from "./MediumPreview";
 
 interface PersonDetailsProps {
   person: Person;
@@ -141,6 +140,15 @@ const PersonDetails: React.FC<PersonDetailsProps> = ({ person }) => {
         ) : null}
         {/* <IconButton onAbort={addName} aria-label="add name" edge="end"> */}
       </Box>
+      <h2>Media</h2>
+      <ul>
+        {person.mediumRefs?.map((mediumRef) => (
+          <li key={mediumRef.handle}>
+            <MediumPreview mediumRef={mediumRef} />
+          </li>
+        ))}
+      </ul>
+
       <h2>Notes</h2>
       <ul>
         {person.notes?.map((note) => (
