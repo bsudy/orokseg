@@ -4,9 +4,14 @@ import { NameField } from "./NameField";
 import { sleep } from "../utils";
 import {
   Box,
+  Checkbox,
   CircularProgress,
   FormControl,
+  FormControlLabel,
+  FormGroup,
   IconButton,
+  ImageList,
+  ImageListItem,
   InputLabel,
   MenuItem,
   TextField,
@@ -49,6 +54,8 @@ const PersonDetails: React.FC<PersonDetailsProps> = ({ person }) => {
   };
 
   const disabled = saving || !editing;
+
+  const [showFullImage, setShowFulllImages] = useState(false);
 
   return (
     <form onSubmit={formik.handleSubmit}>
@@ -141,13 +148,39 @@ const PersonDetails: React.FC<PersonDetailsProps> = ({ person }) => {
         {/* <IconButton onAbort={addName} aria-label="add name" edge="end"> */}
       </Box>
       <h2>Media</h2>
-      <ul>
-        {person.mediumRefs?.map((mediumRef) => (
-          <li key={mediumRef.handle}>
-            <MediumPreview mediumRef={mediumRef} />
-          </li>
-        ))}
-      </ul>
+      <FormGroup>
+        <FormControlLabel
+          control={
+            <Checkbox
+              value={showFullImage}
+              onChange={() => {
+                console.log("Toggle", showFullImage);
+                setShowFulllImages(!showFullImage);
+              }}
+            />
+          }
+          label="Show full image"
+        />
+      </FormGroup>
+      <div
+        style={{
+          width: "100%",
+          display: "flex",
+          flexDirection: "row",
+          overflowY: "scroll",
+        }}
+      >
+        {(person.mediumRefs || [])
+          .filter((mediumRef) => mediumRef !== undefined)
+          .map((mediumRef) => (
+            <MediumPreview
+              mediumRef={mediumRef}
+              style={{ maxHeight: "300px" }}
+              key={mediumRef.handle}
+              full={showFullImage}
+            />
+          ))}
+      </div>
 
       <h2>Notes</h2>
       <ul>
