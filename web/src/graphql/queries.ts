@@ -37,6 +37,7 @@ export const PERSON_FIELDS = gql`
         mime
         description
         contentUrl
+        tags
       }
     }
   }

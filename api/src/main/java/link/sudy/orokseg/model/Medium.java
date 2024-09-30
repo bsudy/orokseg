@@ -10,6 +10,8 @@ public class Medium {
   private final String mime;
   private final String description;
   private final String path;
+  private final List<String> tags;
+  private final Boolean isPrivate;
 
   public String getContentUrl() {
     return "/api/media/" + grampsId + "/content";

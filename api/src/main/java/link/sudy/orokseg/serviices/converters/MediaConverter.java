@@ -7,12 +7,47 @@ import link.sudy.orokseg.model.Medium;
 import link.sudy.orokseg.model.Medium.MediumRef;
 import link.sudy.orokseg.model.Medium.Rectangle;
 import link.sudy.orokseg.repository.model.DBMedium;
+import lombok.val;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class MediaConverter {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(MediaConverter.class);
+
+  public static Medium toMedium(Object obj) {
+
+    // self.handle,
+    // self.gramps_id,
+    // self.path,
+    // self.mime,
+    // self.desc,
+    // self.checksum,
+    // AttributeBase.serialize(self),
+    // CitationBase.serialize(self),
+    // NoteBase.serialize(self),
+    // self.change,
+    // DateBase.serialize(self, no_text_date),
+    // TagBase.serialize(self),
+    // self.private,
+
+    var parts = (Object[]) obj;
+    var handle = (String) parts[0];
+    var grampsId = (String) parts[1];
+    var path = (String) parts[2];
+    var mime = (String) parts[3];
+    var desc = (String) parts[4];
+    var checksum = (String) parts[5];
+    // var attributeList = toStringList(parts[6]);
+    // var citationList = toStringList(parts[7]);
+    // var noteList = toStringList(parts[8]);
+    // var change = (String) parts[9];
+    // var date = (String) parts[10];
+    var tagList = toStringList(parts[11]);
+    var isPrivate = (Boolean) parts[12];
+
+    return new Medium(handle, grampsId, mime, desc, path, tagList, isPrivate);
+  }
 
   public static MediumRef toMediaRef(Object obj) {
 
@@ -39,11 +74,7 @@ public class MediaConverter {
   }
 
   public static Medium toMedium(DBMedium dbMedia) {
-    return new Medium(
-        dbMedia.getHandle(),
-        dbMedia.getGrampsId(),
-        dbMedia.getMime(),
-        dbMedia.getDescription(),
-        dbMedia.getPath());
+    val obj = PickleUtils.unpickle(dbMedia.getBlobData());
+    return toMedium(obj);
   }
 }
