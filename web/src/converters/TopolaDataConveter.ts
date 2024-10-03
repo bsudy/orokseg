@@ -88,7 +88,7 @@ class TopolaConverter {
   }
 
   async addFamily(family: Family) {
-    console.log("Add family", family);
+    // console.log("Add family", family);
     const fam = this.registerFamily(family);
     if (fam) {
       if (family.father) {
@@ -105,7 +105,7 @@ class TopolaConverter {
 
     await Promise.all(
       (family.children || []).map(async (child) => {
-        console.log("Add child", displayName(child.person?.name));
+        // console.log("Add child", displayName(child.person?.name));
         if (
           child.person &&
           !Object.keys(this.indis).includes(child.person?.grampsId)
