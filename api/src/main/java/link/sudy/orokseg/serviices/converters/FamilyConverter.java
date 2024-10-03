@@ -3,6 +3,8 @@ package link.sudy.orokseg.serviices.converters;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.inject.Singleton;
 import java.util.List;
+import java.util.stream.Collectors;
+
 import link.sudy.orokseg.model.Event.EventRef;
 import link.sudy.orokseg.model.Family;
 import link.sudy.orokseg.model.Family.ChildRef;
@@ -42,6 +44,8 @@ public class FamilyConverter {
     // EventBase.serialize(self),
     val eventRefList = ((List<Object[]>) parts[6]).stream().map(this::toEventRef).toList();
     // TOOD MediaBase.serialize(self),
+    var mediaRefList =
+        ((List<Object>)parts[7]).stream().map(MediaConverter::toMediaRef).collect(Collectors.toList());
     // TODO AttributeBase.serialize(self),
     // TODO LdsOrdBase.serialize(self),
     // CitationBase.serialize(self),
@@ -62,6 +66,7 @@ public class FamilyConverter {
         childReferenceList,
         familyType,
         eventRefList,
+        mediaRefList,
         citationHandleList,
         noteHandleList,
         change,

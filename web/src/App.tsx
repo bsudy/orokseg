@@ -11,6 +11,7 @@ import {
 } from "@mui/material";
 import { makeStyles } from "@material-ui/styles";
 import { Person, PersonViewType } from "./pages/Person";
+import { PhotoBook } from "./pages/PhotoBook";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -44,6 +45,10 @@ function App() {
     {
       path: "/people/:grampsId",
       element: <Person type={PersonViewType.Details} />,
+    },
+    {
+      path: "/families/:famGrampsId/book/",
+      element: <PhotoBook />,
     },
   ]);
 

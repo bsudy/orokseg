@@ -13,8 +13,8 @@ export const getCutout = (medium: MediumRef): Promise<string> => {
     const sy = Math.min(rect.y1, rect.y2);
     const width = Math.abs(rect.x2 - rect.x1);
     const height = Math.abs(rect.y2 - rect.y1);
-    console.log("rect", rect);
-    console.log("sx", sx, "sy", sy, "width", width, "height", height);
+    // console.log("rect", rect);
+    // console.log("sx", sx, "sy", sy, "width", width, "height", height);
 
     var image = new Image();
     image.onload = () => {
@@ -24,7 +24,7 @@ export const getCutout = (medium: MediumRef): Promise<string> => {
       const y = image.height * (sy / 100);
       canvas.width = w;
       canvas.height = h;
-      console.log("w", w, "h", h, "x", x, "y", y);
+      // console.log("w", w, "h", h, "x", x, "y", y);
       ctx.drawImage(image, x, y, w, h, 0, 0, w, h);
       resolve(canvas.toDataURL());
     };

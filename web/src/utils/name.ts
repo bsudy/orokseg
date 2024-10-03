@@ -2,7 +2,6 @@ import { Maybe } from "graphql/jsutils/Maybe";
 import { Name } from "../gql/graphql";
 
 export const displayName = (name?: Maybe<Name> | Name) => {
-  console.log("displayName", name);
   if (name) {
     const surname = displaySurname(name);
     const firstname = displayFirstname(name);

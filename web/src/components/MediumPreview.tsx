@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { ReactEventHandler, useEffect, useState } from "react";
 import { MediumRef } from "../gql/graphql";
 import { getCutout } from "../utils/medium";
 import { Box, Modal, Typography } from "@mui/material";
@@ -8,6 +8,7 @@ interface MediumPreviewProps {
   mediumRef: MediumRef;
   full?: boolean;
   style?: React.CSSProperties;
+  onLoad?: ReactEventHandler<HTMLImageElement>;
 }
 
 const modalStyle = {
@@ -27,6 +28,7 @@ export const MediumPreview = ({
   mediumRef,
   style,
   full,
+  onLoad,
 }: MediumPreviewProps) => {
   const [imgUrl, setImgUrl] = useState(null as string | null);
   const [selectedMedium, selectMedium] = useState(null as MediumRef | null);
@@ -53,6 +55,7 @@ export const MediumPreview = ({
               onClick={() => selectMedium(mediumRef)}
               style={{ ...style }}
               src={imgUrl}
+              onLoad={onLoad}
               alt={mediumRef.medium.description || "No description"}
             />
           ) : (

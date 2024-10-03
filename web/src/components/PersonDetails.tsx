@@ -10,8 +10,6 @@ import {
   FormControlLabel,
   FormGroup,
   IconButton,
-  ImageList,
-  ImageListItem,
   InputLabel,
   MenuItem,
   TextField,
@@ -22,6 +20,7 @@ import { Edit, Restore, Save as SaveIcon } from "@mui/icons-material";
 import { useFormik } from "formik";
 import { displayName } from "../utils/name";
 import { MediumPreview } from "./MediumPreview";
+import { Navigate } from "react-router-dom";
 
 interface PersonDetailsProps {
   person: Person;
@@ -180,6 +179,21 @@ const PersonDetails: React.FC<PersonDetailsProps> = ({ person }) => {
               full={showFullImage}
             />
           ))}
+      </div>
+
+      <div>
+        <h2>Families</h2>
+        {(person.families || []).map((family) => (
+          <div key={family.grampsId}>
+            <h3>{`${family.father?.displayName} - ${family.mother?.displayName}`}</h3>
+            <a href={`/families/${family.grampsId}/book/`}>Photo book</a>
+            <ul>
+              {(family.children || []).map((child) => (
+                <li key={child.person!.grampsId}>{displayName(child.person?.name)}</li>
+              ))}
+            </ul>
+          </div>
+        ))}
       </div>
 
       <h2>Notes</h2>

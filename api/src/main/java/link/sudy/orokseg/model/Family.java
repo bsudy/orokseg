@@ -2,6 +2,7 @@ package link.sudy.orokseg.model;
 
 import java.util.List;
 import link.sudy.orokseg.model.Event.EventRef;
+import link.sudy.orokseg.model.Medium.MediumRef;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -20,6 +21,7 @@ public class Family {
   private List<ChildRef> children;
   private FamilyType familyType;
   private List<EventRef> eventRefs;
+  private List<MediumRef> mediumRefs;
 
   private List<String> citationHandleList;
   private List<String> noteHandleList;

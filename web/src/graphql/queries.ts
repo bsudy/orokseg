@@ -13,8 +13,29 @@ export const NAME_FIELDS = gql`
   }
 `;
 
+export const MEDIIM_REF_FILED = gql`
+  fragment MediumRefFields on MediumRef {
+    handle
+    rectangle {
+      x1
+      y1
+      x2
+      y2
+    }
+    medium {
+      handle
+      grampsId
+      mime
+      description
+      contentUrl
+      tags
+    }
+  }
+`;
+
 export const PERSON_FIELDS = gql`
   ${NAME_FIELDS}
+  ${MEDIIM_REF_FILED}
   fragment PersonFields on Person {
     grampsId
     handle
@@ -24,21 +45,7 @@ export const PERSON_FIELDS = gql`
       ...NameFields
     }
     mediumRefs {
-      handle
-      rectangle {
-        x1
-        y1
-        x2
-        y2
-      }
-      medium {
-        handle
-        grampsId
-        mime
-        description
-        contentUrl
-        tags
-      }
+      ...MediumRefFields
     }
   }
 `;
@@ -159,3 +166,68 @@ export const GET_PERSON = gql`
     }
   }
 `;
+
+
+
+export const GET_FAMILY = gql`
+${MEDIIM_REF_FILED}
+${PERSON_FIELDS}
+query family($grampsId: ID!) {
+  familyById(id: $grampsId) {
+      grampsId
+      handle
+      children {
+        handle
+        motherRelationType
+        fatherRelationType
+        privacy
+        person {
+          ...PersonFields
+          families {
+            grampsId
+            handle
+            father {
+              ...PersonFields
+            }
+            mother {
+              ...PersonFields
+            }
+          }
+        }
+      }
+      mediumRefs {
+        ...MediumRefFields
+      }
+      # Should we go sides with other partners?
+      father {
+        ...PersonFields
+        parentFamilies {
+          grampsId
+          handle
+          father {
+            ...PersonFields
+          }
+          mother {
+            ...PersonFields
+          }
+        }
+      }
+      # Should we go sides with other partners?
+      mother {
+        ...PersonFields
+        parentFamilies {
+          grampsId
+          handle
+          father {
+            ...PersonFields
+          }
+          mother {
+            ...PersonFields
+          }
+        }
+      }
+
+    
+  }
+}
+  `

@@ -71,6 +71,7 @@ type Family {
     father: Person
     mother: Person
     children: [Child!]
+    mediumRefs: [MediumRef!]
 }
 
 type Child {
