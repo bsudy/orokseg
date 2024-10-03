@@ -4,15 +4,9 @@ import { getCutout } from "../utils/medium";
 import { displayFirstname, displayName, displaySurname } from "../utils/name";
 import { Maybe } from "graphql/jsutils/Maybe";
 
-
-
-
-
 class TopolaConverter {
-
   private indis = {} as Record<string, JsonIndi>;
   private fams = {} as Record<string, JsonFam>;
-
 
   private registerFamily(family: Family): JsonFam | undefined {
     if (!Object.keys(this.fams).includes(family.grampsId)) {
@@ -35,7 +29,7 @@ class TopolaConverter {
       title: mediumRef.medium.description || "",
     };
   }
-  
+
   private async toTopolaIndi(person: Person): Promise<JsonIndi> {
     const images = [];
     if (
@@ -80,9 +74,7 @@ class TopolaConverter {
     );
   }
 
-
   async addPerson(person: Person) {
-
     await this.processPerson(person);
     await Promise.all(
       (person.families || []).map(async (family) => {
@@ -95,9 +87,8 @@ class TopolaConverter {
     await this.processParentFamily(person);
   }
 
-
   async addFamily(family: Family) {
-    console.log('Add family', family)
+    console.log("Add family", family);
     const fam = this.registerFamily(family);
     if (fam) {
       if (family.father) {
@@ -114,7 +105,7 @@ class TopolaConverter {
 
     await Promise.all(
       (family.children || []).map(async (child) => {
-        console.log('Add child', displayName(child.person?.name))
+        console.log("Add child", displayName(child.person?.name));
         if (
           child.person &&
           !Object.keys(this.indis).includes(child.person?.grampsId)
@@ -134,13 +125,17 @@ class TopolaConverter {
   }
 }
 
-export async function familyToTopolaData(family: Family): Promise<JsonGedcomData> {
+export async function familyToTopolaData(
+  family: Family,
+): Promise<JsonGedcomData> {
   const converter = new TopolaConverter();
   await converter.addFamily(family);
   return converter.getTopolaData();
 }
 
-export async function personToTopolaData(person: Person): Promise<JsonGedcomData> {
+export async function personToTopolaData(
+  person: Person,
+): Promise<JsonGedcomData> {
   const converter = new TopolaConverter();
   await converter.addPerson(person);
   return converter.getTopolaData();

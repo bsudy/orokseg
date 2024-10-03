@@ -189,7 +189,9 @@ const PersonDetails: React.FC<PersonDetailsProps> = ({ person }) => {
             <a href={`/families/${family.grampsId}/book/`}>Photo book</a>
             <ul>
               {(family.children || []).map((child) => (
-                <li key={child.person!.grampsId}>{displayName(child.person?.name)}</li>
+                <li key={child.person!.grampsId}>
+                  {displayName(child.person?.name)}
+                </li>
               ))}
             </ul>
           </div>

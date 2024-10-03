@@ -3,20 +3,20 @@ import * as topola from "topola";
 
 import { generateQuerySelectorFor } from "../utils/dom";
 import { max } from "d3-array";
-import {
-  JsonGedcomData,
-} from "topola";
+import { JsonGedcomData } from "topola";
 import { useNavigate } from "react-router-dom";
-
 
 interface FamilyTreeProps {
   tree: JsonGedcomData;
   onClickOnPerson?: (id: string) => void;
   animate?: boolean;
-
 }
 
-export const FamilyTree = ({ tree, onClickOnPerson, animate = true }: FamilyTreeProps) => {
+export const FamilyTree = ({
+  tree,
+  onClickOnPerson,
+  animate = true,
+}: FamilyTreeProps) => {
   const navigate = useNavigate();
 
   const chartRef = useRef<topola.ChartHandle | null>(null);
@@ -82,9 +82,7 @@ export const FamilyTree = ({ tree, onClickOnPerson, animate = true }: FamilyTree
   }, [tree]);
 
   return (
-    <div
-      className="chartContainer"
-    >
+    <div className="chartContainer">
       <svg className="chartSvg">
         <g className="chart" ref={svgRef} />
       </svg>

@@ -54,7 +54,6 @@
 
 .pageNum {
   bottom: 15px;
-  right: 25px;
   position: absolute;
   text-decoration: none;
   color: black;
@@ -65,7 +64,13 @@
   margin: 4px;
   font-size: 0.8em;
 }
+.page.rightSide .pageNum {
+  left: 25px;
+}
 
+.page.leftSide .pageNum {
+  right: 25px;
+}
 
 .photoPage {
   display: flex;
@@ -89,4 +94,24 @@
 .chartContainer {
   margin: 0px auto;
   display: block;
+}
+
+@page {
+  size: a4 landscape;
+}
+
+/* @import url('https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap'); */
+/* @import url('https://fonts.cdnfonts.com/css/freestyle-script'); */
+@import url("https://fonts.googleapis.com/css2?family=Charm:wght@400;700");
+
+@media print {
+  .page {
+    page-break-after: always;
+    margin: 0;
+  }
+  header,
+  footer,
+  .photoBook-header {
+    display: none;
+  }
 }

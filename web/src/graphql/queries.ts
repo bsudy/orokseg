@@ -167,13 +167,11 @@ export const GET_PERSON = gql`
   }
 `;
 
-
-
 export const GET_FAMILY = gql`
-${MEDIIM_REF_FILED}
-${PERSON_FIELDS}
-query family($grampsId: ID!) {
-  familyById(id: $grampsId) {
+  ${MEDIIM_REF_FILED}
+  ${PERSON_FIELDS}
+  query family($grampsId: ID!) {
+    familyById(id: $grampsId) {
       grampsId
       handle
       children {
@@ -226,8 +224,6 @@ query family($grampsId: ID!) {
           }
         }
       }
-
-    
+    }
   }
-}
-  `
+`;
