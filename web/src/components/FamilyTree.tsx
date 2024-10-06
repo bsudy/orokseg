@@ -3,18 +3,21 @@ import * as topola from "topola";
 
 import { generateQuerySelectorFor } from "../utils/dom";
 import { max } from "d3-array";
-import { JsonGedcomData } from "topola";
 import { useNavigate } from "react-router-dom";
+import { DetailedWithPageNumberRenderer } from "./charts/DetailedWithPageNumberRenderer";
+import { createChart, OroksegJsonGedcomData } from "./charts/OroksegChart";
 
 interface FamilyTreeProps {
-  tree: JsonGedcomData;
+  tree: OroksegJsonGedcomData;
   onClickOnPerson?: (id: string) => void;
+  onClickOnFamily?: (id: string) => void;
   animate?: boolean;
 }
 
 export const FamilyTree = ({
   tree,
   onClickOnPerson,
+  onClickOnFamily,
   animate = true,
 }: FamilyTreeProps) => {
   const navigate = useNavigate();
@@ -31,13 +34,19 @@ export const FamilyTree = ({
     const selector = generateQuerySelectorFor(svgRef.current);
 
     if (!chartRef.current) {
-      const chart = topola.createChart({
+      // topola.
+      const chart = createChart({
         json: tree,
         chartType: topola.HourglassChart,
-        renderer: topola.DetailedRenderer,
+        renderer: DetailedWithPageNumberRenderer,
         animate,
         updateSvgSize: false,
         svgSelector: selector,
+        famCallback: (info) => {
+          if (onClickOnFamily) {
+            onClickOnFamily(info.id);
+          }
+        },
         indiCallback: (info) => {
           if (onClickOnPerson) {
             onClickOnPerson(info.id);
@@ -46,6 +55,7 @@ export const FamilyTree = ({
           }
         },
       });
+
       chartRef.current = chart;
     } else {
       chartRef.current.setData(tree);

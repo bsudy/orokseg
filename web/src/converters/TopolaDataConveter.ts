@@ -1,14 +1,20 @@
 import { JsonFam, JsonGedcomData, JsonImage, JsonIndi } from "topola";
 import { Family, MediumRef, Person } from "../gql/graphql";
 import { getCutout } from "../utils/medium";
-import { displayFirstname, displayName, displaySurname } from "../utils/name";
+import { displayFirstname, displaySurname } from "../utils/name";
 import { Maybe } from "graphql/jsutils/Maybe";
+import {
+  OroksegJsonGedcomData,
+  OroksegJsonFam,
+} from "../components/charts/OroksegChart";
 
 class TopolaConverter {
   private indis = {} as Record<string, JsonIndi>;
   private fams = {} as Record<string, JsonFam>;
 
-  private registerFamily(family: Family): JsonFam | undefined {
+  constructor(readonly pages?: Record<string, number>) {}
+
+  private registerFamily(family: Family): OroksegJsonFam | undefined {
     if (!Object.keys(this.fams).includes(family.grampsId)) {
       const jsonFam = {
         id: family.grampsId,
@@ -17,7 +23,15 @@ class TopolaConverter {
         children: family.children
           ?.map((child) => child.person?.grampsId)
           .filter((id) => id !== undefined) as string[] | undefined,
-      };
+        // marriage: {
+        //   type: "MARR",
+        //   date: {
+        //     year: 1900,
+        //   },
+        //   place: "Székesfehérvár",
+        // },
+        page: this.pages?.[family.grampsId],
+      } as OroksegJsonFam;
       this.fams[family.grampsId] = jsonFam;
       return jsonFam;
     }
@@ -111,6 +125,12 @@ class TopolaConverter {
           !Object.keys(this.indis).includes(child.person?.grampsId)
         ) {
           await this.processPerson(child.person!);
+          // spouses of children
+          await Promise.all(
+            (child.person?.families || []).map(async (family) => {
+              await this.addFamily(family);
+            }),
+          );
         }
         this.indis[child.person!.grampsId].famc = family.grampsId;
       }),
@@ -127,16 +147,18 @@ class TopolaConverter {
 
 export async function familyToTopolaData(
   family: Family,
-): Promise<JsonGedcomData> {
-  const converter = new TopolaConverter();
+  pages?: Record<string, number>,
+): Promise<OroksegJsonGedcomData> {
+  const converter = new TopolaConverter(pages);
   await converter.addFamily(family);
   return converter.getTopolaData();
 }
 
 export async function personToTopolaData(
   person: Person,
-): Promise<JsonGedcomData> {
-  const converter = new TopolaConverter();
+  pages?: Record<string, number>,
+): Promise<OroksegJsonGedcomData> {
+  const converter = new TopolaConverter(pages);
   await converter.addPerson(person);
   return converter.getTopolaData();
 }

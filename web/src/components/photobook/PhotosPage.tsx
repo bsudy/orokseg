@@ -3,9 +3,10 @@ import { Family } from "../../gql/graphql";
 import { CircularProgress } from "@mui/material";
 import { MediumPreview } from "../MediumPreview";
 
-interface PhotosPage {
+interface PhotosPageProps {
   family: Family;
   pageNum: number;
+  pageStyle?: React.CSSProperties;
 }
 
 function calculateWidth(imageRations: number[], row: number): number {
@@ -123,7 +124,7 @@ function determineRowNumber(imageRations: number[]): number {
   }
 }
 
-export const PhotosPage = ({ family, pageNum }: PhotosPage) => {
+export const PhotosPage = ({ family, pageNum, pageStyle }: PhotosPageProps) => {
   const [loading, setLoading] = useState(true);
 
   const [imageRations, setImageRations] = useState(
@@ -148,39 +149,47 @@ export const PhotosPage = ({ family, pageNum }: PhotosPage) => {
   };
 
   useEffect(() => {
-    if (!family || !family.mediumRefs || family.mediumRefs.length === 0) {
-      return;
-    }
-    for (const mediumRef of family.mediumRefs || []) {
-      if (!imageRations[mediumRef.medium.grampsId]) {
+    try {
+      if (!family || !family.mediumRefs || family.mediumRefs.length === 0) {
         return;
       }
-    }
+      for (const mediumRef of family.mediumRefs || []) {
+        if (!imageRations[mediumRef.medium.grampsId]) {
+          return;
+        }
+      }
 
-    const rows = determineRowNumber(
-      (family.mediumRefs || []).map(
-        (mediumRef) => imageRations[mediumRef.medium.grampsId],
-      ),
-    );
-    setImageHeight(`${100 / rows}%`);
-    setLoading(false);
+      const rows = determineRowNumber(
+        (family.mediumRefs || []).map(
+          (mediumRef) => imageRations[mediumRef.medium.grampsId],
+        ),
+      );
+      setImageHeight(`${100 / rows}%`);
+    } finally {
+      setLoading(false);
+    }
   }, [imageRations, family]);
 
   return (
     <>
       <div
         className={
-          `page-left-${family.grampsId} page ` +
+          `page-left-${family.grampsId} page photosPage ` +
           (pageNum % 2 === 0 ? "leftSide" : "rightSide")
         }
+        style={pageStyle}
       >
-        <div className="photoPage">
+        <div className="photosPage-container">
           {(family.mediumRefs || []).map((mediumRef) => {
             return (
               <div
                 key={mediumRef.medium.grampsId}
-                className="photoBook-page-medium"
-                style={{ height: imageHeight, padding: "10px" }}
+                className="photosPage-page-medium"
+                style={{
+                  height: imageHeight,
+                  padding: "10px",
+                  opacity: loading ? 0 : 1,
+                }}
               >
                 <MediumPreview
                   mediumRef={mediumRef}
@@ -189,6 +198,12 @@ export const PhotosPage = ({ family, pageNum }: PhotosPage) => {
               </div>
             );
           })}
+          {loading && (
+            <div className="photosPage-loading">
+              <CircularProgress />
+              <span>Loading...</span>
+            </div>
+          )}
           <span className="pageNum">{pageNum}</span>
         </div>
       </div>

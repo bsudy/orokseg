@@ -8,16 +8,23 @@ import { CircularProgress } from "@mui/material";
 interface FamilyTreePageProps {
   family: Family;
   pageNum: number;
+  pageStyle?: React.CSSProperties;
+  pages?: Record<string, number>;
 }
 
-export const FamilyTreePage = ({ family, pageNum }: FamilyTreePageProps) => {
+export const FamilyTreePage = ({
+  family,
+  pageNum,
+  pageStyle,
+  pages,
+}: FamilyTreePageProps) => {
   const [chartData, setChartData] = useState(null as JsonGedcomData | null);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     if (family) {
       setLoading(true);
-      familyToTopolaData(family).then(
+      familyToTopolaData(family, pages).then(
         (data) => {
           setChartData(data);
           setLoading(false);
@@ -37,6 +44,7 @@ export const FamilyTreePage = ({ family, pageNum }: FamilyTreePageProps) => {
           `page-left-${family.grampsId} page ` +
           (pageNum % 2 === 0 ? "leftSide" : "rightSide")
         }
+        style={pageStyle}
       >
         {loading && <CircularProgress />}
         {chartData && <FamilyTree tree={chartData} />}

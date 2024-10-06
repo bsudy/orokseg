@@ -3,13 +3,14 @@ import { Family } from "../gql/graphql";
 import { useParams } from "react-router-dom";
 import { GET_FAMILY } from "../graphql/queries";
 import { useApolloClient } from "@apollo/client";
-import { PhotoBookPage } from "../components/PhotoBookPage";
+import { PhotoBook } from "../components/PhotoBook";
+import { Box, Button, TextField, Typography } from "@mui/material";
 
 type PhotoBookParams = {
   famGrampsId: string;
 };
 
-export function PhotoBook() {
+export function PhotoBookPage() {
   const client = useApolloClient();
 
   const { famGrampsId } = useParams<PhotoBookParams>();
@@ -106,17 +107,46 @@ export function PhotoBook() {
     }
   };
 
+  const [title, setTitle] = useState("Photo Book");
+  const [generationUp, setGenerationUp] = useState(4);
+  const [generationDown, setGenerationDown] = useState(2);
+
   return (
     <div>
       <div className="photoBook-header">
-        <h1>Photo Book</h1>
-        <button onClick={() => generate(famGrampsId, 2, 2)}>Generate</button>
+        <Typography variant="h1">Photo Book</Typography>
+        {/* A number input field for the generation from Material UI */}
+        <Box sx={{ display: "flex", alignItems: "center" }}>
+          <TextField
+            label="Title"
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+          />
+          <TextField
+            type="number"
+            label="Generation up"
+            value={generationUp}
+            onChange={(e) => setGenerationUp(parseInt(e.target.value))}
+          />
+          <TextField
+            type="number"
+            label="Generation down"
+            value={generationDown}
+            onChange={(e) => setGenerationDown(parseInt(e.target.value))}
+          />
+          <Button
+            onClick={() => generate(famGrampsId, generationDown, generationUp)}
+            variant="contained"
+          >
+            Generate
+          </Button>
+        </Box>
       </div>
 
       <div className="photoBook">
         {loading && <div>Loading...</div>}
         {!!error && <div>Error: {`${error}`}</div>}
-        {families && <PhotoBookPage families={families} />}
+        {families && <PhotoBook families={families} title={title} />}
       </div>
     </div>
   );
