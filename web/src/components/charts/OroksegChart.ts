@@ -32,6 +32,10 @@ export interface RenderOptions {
 }
 
 export type OroksegJsonFam = JsonFam & { page?: number };
+export type OroksegJsonIndi = JsonIndi & {
+  denomination?: string;
+  occupation?: string;
+};
 export type OroksegJsonGedcomData = JsonGedcomData & { fams: OroksegJsonFam[] };
 
 export class OroksegFamDetails implements FamDetails {
@@ -60,8 +64,8 @@ export class OroksegFamDetails implements FamDetails {
 }
 
 /** Details of an individual based on Json input. */
-class JsonIndiDetails implements IndiDetails {
-  constructor(readonly json: JsonIndi) {}
+export class OroksegIndiDetails implements IndiDetails {
+  constructor(readonly json: OroksegJsonIndi) {}
   getId() {
     return this.json.id;
   }
@@ -127,6 +131,12 @@ class JsonIndiDetails implements IndiDetails {
   showSex() {
     return !this.json.hideSex;
   }
+  getDenomination() {
+    return this.json.denomination || null;
+  }
+  getOccupation() {
+    return this.json.occupation || null;
+  }
 }
 
 export class OroksegJsonDataProvider
@@ -137,7 +147,13 @@ export class OroksegJsonDataProvider
 
   constructor(readonly json: OroksegJsonGedcomData) {
     json.indis.forEach((indi) =>
-      this.indis.set(indi.id, new JsonIndiDetails(indi)),
+      this.indis.set(
+        indi.id,
+        new OroksegIndiDetails({
+          ...indi,
+          hideId: true,
+        }),
+      ),
     );
     json.fams.forEach((fam) =>
       this.fams.set(fam.id, new OroksegFamDetails(fam)),

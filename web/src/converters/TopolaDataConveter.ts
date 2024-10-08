@@ -1,11 +1,12 @@
 import { JsonFam, JsonGedcomData, JsonImage, JsonIndi } from "topola";
-import { Family, MediumRef, Person } from "../gql/graphql";
+import { AttributeType, Family, MediumRef, Person } from "../gql/graphql";
 import { getCutout } from "../utils/medium";
 import { displayFirstname, displaySurname } from "../utils/name";
 import { Maybe } from "graphql/jsutils/Maybe";
 import {
   OroksegJsonGedcomData,
   OroksegJsonFam,
+  OroksegJsonIndi,
 } from "../components/charts/OroksegChart";
 
 class TopolaConverter {
@@ -44,7 +45,7 @@ class TopolaConverter {
     };
   }
 
-  private async toTopolaIndi(person: Person): Promise<JsonIndi> {
+  private async toTopolaIndi(person: Person): Promise<OroksegJsonIndi> {
     const images = [];
     if (
       person.mediumRefs &&
@@ -53,6 +54,14 @@ class TopolaConverter {
     ) {
       images.push(await this.toImg(person.mediumRefs[0]));
     }
+
+    var occupation =
+      person.attributes?.find((attr) => attr.type === AttributeType.Occupation)
+        ?.value || undefined;
+    var denomination =
+      person.attributes?.find((attr) => attr.customType === "Denomination")
+        ?.value || undefined;
+
     return {
       id: person.grampsId,
       firstName: displayFirstname(person.name),
@@ -60,6 +69,8 @@ class TopolaConverter {
       // famc: null,
       fams: [],
       images,
+      occupation,
+      denomination,
     };
   }
 

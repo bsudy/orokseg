@@ -4,6 +4,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
+import link.sudy.orokseg.model.Attribute;
+import link.sudy.orokseg.model.Attribute.AttributeType;
 import link.sudy.orokseg.model.Gender;
 import link.sudy.orokseg.model.Name;
 import link.sudy.orokseg.model.Person;
@@ -74,6 +76,9 @@ public class PersonConverter {
     var mediaRefList =
         toList(parts[10]).stream().map(MediaConverter::toMediaRef).collect(Collectors.toList());
 
+    var attributes =
+        toList(parts[12]).stream().map(PersonConverter::toAttribute).collect(Collectors.toList());
+
     var noteRefList = ConversionUtils.toStringList(parts[16]);
 
     // var isPrivate = toPrivacyBase(parts[19]);
@@ -91,7 +96,8 @@ public class PersonConverter {
         familyRefList,
         parentFamilyRefList,
         noteRefList,
-        mediaRefList
+        mediaRefList,
+        attributes
         // obj,
         // blob64
         );
@@ -187,5 +193,26 @@ public class PersonConverter {
       return null;
     }
     return (Boolean) obj;
+  }
+
+  public static Attribute toAttribute(Object obj) {
+    //   return (
+    //     PrivacyBase.serialize(self),
+    //     CitationBase.serialize(self),
+    //     NoteBase.serialize(self),
+    //     self.type.serialize(),
+    //     self.value,
+    // )
+    var parts = (Object[]) obj;
+
+    var privacy = (Boolean) parts[0];
+    // CitationBase
+    // NoteBase
+    var typeIdx = (Integer) (((Object[]) parts[3])[0]);
+    var type = typeIdx == null || typeIdx < 0 ? null : AttributeType.values()[typeIdx];
+    var customType = Objects.toString((((Object[]) parts[3])[1]));
+    var value = Objects.toString(parts[4]);
+
+    return new Attribute(type, customType, value, privacy);
   }
 }

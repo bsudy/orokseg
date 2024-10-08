@@ -13,6 +13,14 @@ export const NAME_FIELDS = gql`
   }
 `;
 
+export const ATTRIBUTE_FIELDS = gql`
+  fragment AttributeFields on Attribute {
+    type
+    customType
+    value
+  }
+`;
+
 export const MEDIIM_REF_FILED = gql`
   fragment MediumRefFields on MediumRef {
     handle
@@ -36,6 +44,7 @@ export const MEDIIM_REF_FILED = gql`
 export const PERSON_FIELDS = gql`
   ${NAME_FIELDS}
   ${MEDIIM_REF_FILED}
+  ${ATTRIBUTE_FIELDS}
   fragment PersonFields on Person {
     grampsId
     handle
@@ -46,6 +55,9 @@ export const PERSON_FIELDS = gql`
     }
     mediumRefs {
       ...MediumRefFields
+    }
+    attributes {
+      ...AttributeFields
     }
   }
 `;

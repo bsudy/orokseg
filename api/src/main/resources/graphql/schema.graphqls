@@ -21,6 +21,32 @@ type Person {
     parentFamilies: [Family!]
     notes: [Note!]
     mediumRefs: [MediumRef!]
+    attributes: [Attribute!]
+}
+
+type Attribute {
+    type: AttributeType
+    customType: String
+    value: String
+}
+
+enum AttributeType {
+    CUSTOM
+    CASTE
+    DESCRIPTION
+    ID
+    NATIONAL
+    NUM_CHILD
+    SSN
+    NICKNAME
+    CAUSE
+    AGENCY
+    AGE
+    FATHER_AGE
+    MOTHER_AGE
+    WITNESS
+    TIME
+    OCCUPATION
 }
 
 type Medium {

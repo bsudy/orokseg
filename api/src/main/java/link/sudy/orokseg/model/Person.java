@@ -26,6 +26,8 @@ public class Person {
 
   private List<Medium.MediumRef> mediumRefs;
 
+  private List<Attribute> attributes;
+
   public String getDisplayName() {
     return name != null ? name.getDisplayName() : "<Unknown>";
   }

@@ -17,7 +17,7 @@ import {
   getFamPositionVertical,
 } from "topola";
 import { HierarchyPointNode } from "d3-hierarchy";
-import { OroksegFamDetails } from "./OroksegChart";
+import { OroksegFamDetails, OroksegIndiDetails } from "./OroksegChart";
 
 const INDI_MIN_HEIGHT = 44;
 const INDI_MIN_WIDTH = 64;
@@ -116,6 +116,15 @@ export class DetailedWithPageNumberRenderer
       detailsList[listIndex].symbol = "+";
     } else if (indi.isConfirmedDeath()) {
       detailsList.push({ symbol: "+", text: "" });
+    }
+
+    const occupation = (indi as OroksegIndiDetails).getOccupation();
+    const denomination = (indi as OroksegIndiDetails).getDenomination();
+    if (occupation) {
+      detailsList.push({ symbol: "", text: occupation });
+    }
+    if (denomination) {
+      detailsList.push({ symbol: "", text: denomination });
     }
     return detailsList;
   }
