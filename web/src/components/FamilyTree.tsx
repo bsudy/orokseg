@@ -2,7 +2,7 @@ import { useEffect, useRef } from "react";
 import * as topola from "topola";
 
 import { generateQuerySelectorFor } from "../utils/dom";
-import { max } from "d3-array";
+import { max, min } from "d3-array";
 import { useNavigate } from "react-router-dom";
 import { DetailedWithPageNumberRenderer } from "./charts/DetailedWithPageNumberRenderer";
 import { createChart, OroksegJsonGedcomData } from "./charts/OroksegChart";
@@ -65,26 +65,37 @@ export const FamilyTree = ({
 
     const svg = svgRef.current;
     const svgParent = svg.parentElement! as Element as SVGElement;
-    const parent = svgParent.parentElement! as Element as HTMLDivElement;
-    const area = parent.getBoundingClientRect();
-    // console.log("area", area);
+    // TODO this is a hack to get the parent div
+    const parent = svgParent.parentElement!
+      .parentElement! as Element as HTMLDivElement;
 
-    const scale = 1.4;
-    const offsetX =
-      max([0, (parent.clientWidth - chartInfo.size[0] * scale) / 2]) || 0;
-    const offsetY =
-      max([0, (parent.clientHeight - chartInfo.size[1] * scale) / 2]) || 0;
+    const xScale = parent.clientWidth / chartInfo.size[0];
+    const yScale = parent.clientHeight / chartInfo.size[1];
+
+    // Maximum scale is 1.4. Otherwise the chart can get too big.
+    const scale = min([xScale, yScale, 1.4]) || 1;
+
+    const offsetX = -(chartInfo.size[0] - chartInfo.size[0] * scale) / 2;
+    const offsetY = -(chartInfo.size[1] - chartInfo.size[1] * scale) / 2;
 
     svgParent.style.setProperty("transform-delay", "200ms");
     svgParent.style.setProperty("transform-duration", "500ms");
     svgParent.style.setProperty("width", chartInfo.size[0] + "px");
     svgParent.style.setProperty("height", chartInfo.size[1] + "px");
     svgParent.style.setProperty("scale", `${scale}`);
-    // console.log("transform", `translate(${offsetX}px, ${offsetY}px)`);
-    // svgParent.style.setProperty(
-    //   "transform",
-    //   `translate(${offsetX / scale}px, ${offsetY / scale}px)`,
-    // );
+    svgParent.parentElement!.style.setProperty(
+      "width",
+      chartInfo.size[0] * scale + "px",
+    );
+    svgParent.parentElement!.style.setProperty(
+      "height",
+      chartInfo.size[1] * scale + "px",
+    );
+
+    svgParent.style.setProperty(
+      "transform",
+      `translate(${offsetX / scale}px, ${offsetY / scale}px)`,
+    );
   }
 
   useEffect(() => {
