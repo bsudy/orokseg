@@ -3,6 +3,8 @@ package link.sudy.orokseg.resources;
 import java.util.Optional;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
+import link.sudy.orokseg.model.Event;
+import link.sudy.orokseg.model.Event.EventRef;
 import link.sudy.orokseg.model.Family;
 import link.sudy.orokseg.model.Family.ChildRef;
 import link.sudy.orokseg.model.Medium;
@@ -10,6 +12,7 @@ import link.sudy.orokseg.model.Medium.MediumRef;
 import link.sudy.orokseg.model.Note;
 import link.sudy.orokseg.model.Person;
 import link.sudy.orokseg.model.PersonList;
+import link.sudy.orokseg.serviices.EventService;
 import link.sudy.orokseg.serviices.FamilyService;
 import link.sudy.orokseg.serviices.MediaService;
 import link.sudy.orokseg.serviices.NoteService;
@@ -28,16 +31,19 @@ public class GraphQLResource {
   private FamilyService familyService;
   private NoteService noteService;
   private MediaService mediaService;
+  private EventService eventService;
 
   public GraphQLResource(
       PersonService personService,
       FamilyService familyService,
       NoteService noteService,
-      MediaService mediaService) {
+      MediaService mediaService,
+      EventService eventService) {
     this.personService = personService;
     this.familyService = familyService;
     this.noteService = noteService;
     this.mediaService = mediaService;
+    this.eventService = eventService;
   }
 
   @QueryMapping
@@ -121,5 +127,10 @@ public class GraphQLResource {
   @SchemaMapping(typeName = "MediumRef", field = "medium")
   public Medium medium(MediumRef mediumRef) {
     return mediaService.getMediumByHandle(mediumRef.getHandle()).get();
+  }
+
+  @SchemaMapping(typeName = "EventRef", field = "event")
+  public Event event(EventRef eventRef) {
+    return eventService.getEventByHandle(eventRef.getHandle()).get();
   }
 }

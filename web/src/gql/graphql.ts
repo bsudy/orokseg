@@ -62,6 +62,91 @@ export enum ChildRelationType {
   Unknown = 'UNKNOWN'
 }
 
+export type Date = {
+  __typename?: 'Date';
+  endDate?: Maybe<DateDay>;
+  startDate: DateDay;
+  text?: Maybe<Scalars['String']['output']>;
+};
+
+export type DateDay = {
+  __typename?: 'DateDay';
+  day?: Maybe<Scalars['Int']['output']>;
+  month?: Maybe<Scalars['Int']['output']>;
+  year?: Maybe<Scalars['Int']['output']>;
+};
+
+export type Event = {
+  __typename?: 'Event';
+  attributes?: Maybe<Array<Attribute>>;
+  date: Date;
+  description?: Maybe<Scalars['String']['output']>;
+  grampsId: Scalars['String']['output'];
+  handle: Scalars['String']['output'];
+  type: EventType;
+};
+
+export type EventRef = {
+  __typename?: 'EventRef';
+  event: Event;
+  handle: Scalars['String']['output'];
+};
+
+export type EventType = {
+  __typename?: 'EventType';
+  type: EventTypeEnum;
+  value?: Maybe<Scalars['String']['output']>;
+};
+
+export enum EventTypeEnum {
+  Adopt = 'ADOPT',
+  AdultChristen = 'ADULT_CHRISTEN',
+  Annulment = 'ANNULMENT',
+  Baptism = 'BAPTISM',
+  BarMitzvah = 'BAR_MITZVAH',
+  BasMitzvah = 'BAS_MITZVAH',
+  Birth = 'BIRTH',
+  Bless = 'BLESS',
+  Burial = 'BURIAL',
+  CauseDeath = 'CAUSE_DEATH',
+  Census = 'CENSUS',
+  Christen = 'CHRISTEN',
+  Confirmation = 'CONFIRMATION',
+  Cremation = 'CREMATION',
+  Custom = 'CUSTOM',
+  Death = 'DEATH',
+  Degree = 'DEGREE',
+  Divorce = 'DIVORCE',
+  DivFiling = 'DIV_FILING',
+  Education = 'EDUCATION',
+  Elected = 'ELECTED',
+  Emigration = 'EMIGRATION',
+  Engagement = 'ENGAGEMENT',
+  FirstCommun = 'FIRST_COMMUN',
+  Graduation = 'GRADUATION',
+  Immigration = 'IMMIGRATION',
+  Marriage = 'MARRIAGE',
+  MarrAlt = 'MARR_ALT',
+  MarrBanns = 'MARR_BANNS',
+  MarrContr = 'MARR_CONTR',
+  MarrLic = 'MARR_LIC',
+  MarrSettl = 'MARR_SETTL',
+  MedInfo = 'MED_INFO',
+  MilitaryServ = 'MILITARY_SERV',
+  Naturalization = 'NATURALIZATION',
+  NobTitle = 'NOB_TITLE',
+  NumMarriages = 'NUM_MARRIAGES',
+  Occupation = 'OCCUPATION',
+  Ordination = 'ORDINATION',
+  Probate = 'PROBATE',
+  Property = 'PROPERTY',
+  Religion = 'RELIGION',
+  Residence = 'RESIDENCE',
+  Retirement = 'RETIREMENT',
+  Stillbirth = 'STILLBIRTH',
+  Will = 'WILL'
+}
+
 export type Family = {
   __typename?: 'Family';
   children?: Maybe<Array<Child>>;
@@ -160,7 +245,10 @@ export enum NoteTypeEnum {
 export type Person = {
   __typename?: 'Person';
   attributes?: Maybe<Array<Attribute>>;
+  birthEvent?: Maybe<EventRef>;
+  deathEvent?: Maybe<EventRef>;
   displayName: Scalars['String']['output'];
+  events?: Maybe<Array<EventRef>>;
   families?: Maybe<Array<Family>>;
   gender?: Maybe<Gender>;
   grampsId: Scalars['ID']['output'];

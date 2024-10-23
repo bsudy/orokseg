@@ -4,7 +4,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.inject.Singleton;
 import java.util.List;
 import java.util.stream.Collectors;
-import link.sudy.orokseg.model.Event.EventRef;
 import link.sudy.orokseg.model.Family;
 import link.sudy.orokseg.model.Family.ChildRef;
 import link.sudy.orokseg.model.Family.ChildRelationType;
@@ -41,7 +40,7 @@ public class FamilyConverter {
     // self.type.serialize(),
     var familyType = FamilyType.values()[(Integer) ((Object[]) parts[5])[0]];
     // EventBase.serialize(self),
-    val eventRefList = ((List<Object[]>) parts[6]).stream().map(this::toEventRef).toList();
+    val eventRefList = EventConverter.toEventRefsList(parts[6]);
     // TOOD MediaBase.serialize(self),
     var mediaRefList =
         ((List<Object>) parts[7])
@@ -49,7 +48,7 @@ public class FamilyConverter {
     // TODO AttributeBase.serialize(self),
     // TODO LdsOrdBase.serialize(self),
     // CitationBase.serialize(self),
-    val citationHandleList = toCitationBase(parts[10]);
+    val citationHandleList = BaseConverters.toCitationBase(parts[10]);
     // NoteBase.serialize(self),
     val noteHandleList = (List<String>) parts[11];
     // self.change,
@@ -82,16 +81,12 @@ public class FamilyConverter {
     }
   }
 
-  private List<String> toCitationBase(Object obj) {
-    return (List<String>) obj;
-  }
-
   private ChildRef toChildRef(Object obj) {
     val parts = (Object[]) obj;
 
     val privacy = (Boolean) parts[0];
     // CitationBase
-    val citationHandleList = toCitationBase(parts[1]);
+    val citationHandleList = BaseConverters.toCitationBase(parts[1]);
     // NoteBase
     var noteHandleList = (List<String>) parts[2];
     // RefBase
@@ -116,23 +111,5 @@ public class FamilyConverter {
         citationHandleList,
         noteHandleList,
         privacy);
-  }
-
-  private EventRef toEventRef(Object obj) {
-    // return (
-    //     PrivacyBase.serialize(self),
-    //     CitationBase.serialize(self),
-    //     NoteBase.serialize(self),
-    //     AttributeBase.serialize(self),
-    //     RefBase.serialize(self),
-    //     self.__role.serialize(),
-    // )
-    var parts = (Object[]) obj;
-    val privacy = (Boolean) parts[0];
-    // CitationBase
-    val citationHandleList = toCitationBase(parts[1]);
-    // NoteBase
-    var noteHandleList = (List<String>) parts[2];
-    return new EventRef(citationHandleList, noteHandleList, privacy);
   }
 }

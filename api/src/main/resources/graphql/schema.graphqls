@@ -22,6 +22,9 @@ type Person {
     notes: [Note!]
     mediumRefs: [MediumRef!]
     attributes: [Attribute!]
+    events: [EventRef!]
+    birthEvent: EventRef
+    deathEvent: EventRef
 }
 
 type Attribute {
@@ -185,4 +188,87 @@ type StyledTextTag {
 type StyledTextRange {
     start: Int!
     end: Int!
+}
+
+type EventRef {
+    handle: String!
+    event: Event!
+    # notes: [Note!]
+    # citations: [Citation!]
+}
+
+type Event {
+    handle: String!
+    grampsId: String!
+    type: EventType!
+    date: Date!
+    description: String
+    attributes: [Attribute!]
+}
+
+type EventType {
+    type: EventTypeEnum!
+    value: String
+}
+
+enum EventTypeEnum {
+    CUSTOM
+    MARRIAGE
+    MARR_SETTL
+    MARR_LIC
+    MARR_CONTR
+    MARR_BANNS
+    ENGAGEMENT
+    DIVORCE
+    DIV_FILING
+    ANNULMENT
+    MARR_ALT
+    ADOPT
+    BIRTH
+    DEATH
+    ADULT_CHRISTEN
+    BAPTISM
+    BAR_MITZVAH
+    BAS_MITZVAH
+    BLESS
+    BURIAL
+    CAUSE_DEATH
+    CENSUS
+    CHRISTEN
+    CONFIRMATION
+    CREMATION
+    DEGREE
+    EDUCATION
+    ELECTED
+    EMIGRATION
+    FIRST_COMMUN
+    IMMIGRATION
+    GRADUATION
+    MED_INFO
+    MILITARY_SERV
+    NATURALIZATION
+    NOB_TITLE
+    NUM_MARRIAGES
+    OCCUPATION
+    ORDINATION
+    PROBATE
+    PROPERTY
+    RELIGION
+    RESIDENCE
+    RETIREMENT
+    WILL
+    STILLBIRTH
+}
+
+type Date {
+    # TODO calendartype, newyeartime, datemodifier
+    startDate: DateDay!
+    endDate: DateDay
+    text: String
+}
+
+type DateDay {
+    day: Int
+    month: Int
+    year: Int
 }
