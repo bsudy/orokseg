@@ -41,10 +41,44 @@ export const MEDIIM_REF_FILED = gql`
   }
 `;
 
+export const EVENT_FIELDS = gql`
+  fragment EventFields on EventRef {
+    handle
+    event {
+      handle
+      grampsId
+      date {
+        startDate {
+          day
+          month
+          year
+        }
+        endDate {
+          day
+          month
+          year
+        }
+        text
+      }
+      type {
+        type
+        value
+      }
+      description
+      attributes {
+        type
+        customType
+        value
+      }
+    }
+  }
+`;
+
 export const PERSON_FIELDS = gql`
   ${NAME_FIELDS}
   ${MEDIIM_REF_FILED}
   ${ATTRIBUTE_FIELDS}
+  ${EVENT_FIELDS}
   fragment PersonFields on Person {
     grampsId
     handle
@@ -58,6 +92,12 @@ export const PERSON_FIELDS = gql`
     }
     attributes {
       ...AttributeFields
+    }
+    birthEvent {
+      ...EventFields
+    }
+    deathEvent {
+      ...EventFields
     }
   }
 `;

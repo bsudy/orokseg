@@ -1,4 +1,10 @@
-import { JsonFam, JsonGedcomData, JsonImage, JsonIndi } from "topola";
+import {
+  JsonEvent,
+  JsonFam,
+  JsonGedcomData,
+  JsonImage,
+  JsonIndi,
+} from "topola";
 import { AttributeType, Family, MediumRef, Person } from "../gql/graphql";
 import { getCutout } from "../utils/medium";
 import { displayFirstname, displaySurname } from "../utils/name";
@@ -55,12 +61,41 @@ class TopolaConverter {
       images.push(await this.toImg(person.mediumRefs[0]));
     }
 
-    var occupation =
+    const occupation =
       person.attributes?.find((attr) => attr.type === AttributeType.Occupation)
         ?.value || undefined;
-    var denomination =
+    const denomination =
       person.attributes?.find((attr) => attr.customType === "Denomination")
         ?.value || undefined;
+
+    let birth = undefined;
+    if (person.birthEvent?.event?.date?.startDate) {
+      const dt = person.birthEvent.event.date.startDate;
+      birth = {
+        date: {
+          day: dt.day || undefined,
+          month: dt.month || undefined,
+          year: dt.year || undefined,
+        },
+        // handle enddate (in that case is should be a range)
+        type: "BIRT",
+      } as JsonEvent;
+    }
+
+    let death = undefined;
+    if (person.deathEvent?.event?.date?.startDate) {
+      const dt = person.deathEvent.event.date.startDate;
+
+      death = {
+        date: {
+          day: dt.day || undefined,
+          month: dt.month || undefined,
+          year: dt.year || undefined,
+        },
+        // handle enddate (in that case is should be a range)
+        type: "DEAT",
+      } as JsonEvent;
+    }
 
     return {
       id: person.grampsId,
@@ -71,6 +106,8 @@ class TopolaConverter {
       images,
       occupation,
       denomination,
+      birth,
+      death,
     };
   }
 

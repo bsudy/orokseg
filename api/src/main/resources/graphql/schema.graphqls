@@ -201,7 +201,7 @@ type Event {
     handle: String!
     grampsId: String!
     type: EventType!
-    date: Date!
+    date: Date
     description: String
     attributes: [Attribute!]
 }

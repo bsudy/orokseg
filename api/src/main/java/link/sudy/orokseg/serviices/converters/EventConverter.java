@@ -86,6 +86,9 @@ public class EventConverter {
   }
 
   private static Date toDate(Object obj) {
+    if (obj == null) {
+      return null;
+    }
     val parts = (Object[]) obj;
     // [0, 0, 0, [6, 12, 1956, false], , 2435814, 0]
 
