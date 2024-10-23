@@ -24,7 +24,9 @@ export const FamilyTreePage = ({
   useEffect(() => {
     if (family) {
       setLoading(true);
-      familyToTopolaData(family, pages).then(
+      const pagesCopy = { ...pages };
+      delete pagesCopy[family.grampsId];
+      familyToTopolaData(family, pagesCopy).then(
         (data) => {
           setChartData(data);
           setLoading(false);
@@ -35,7 +37,7 @@ export const FamilyTreePage = ({
         },
       );
     }
-  }, [family]);
+  }, [family, pages]);
 
   return (
     <>
