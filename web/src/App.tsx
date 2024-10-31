@@ -12,6 +12,7 @@ import {
 import { makeStyles } from "@material-ui/styles";
 import { Person, PersonViewType } from "./pages/Person";
 import { PhotoBookPage } from "./pages/PhotoBookPage";
+import { ChartTest } from "./pages/ChartTest";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -49,6 +50,10 @@ function App() {
     {
       path: "/families/:famGrampsId/book/",
       element: <PhotoBookPage />,
+    },
+    {
+      path: "/test",
+      element: <ChartTest />,
     },
   ]);
 

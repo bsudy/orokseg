@@ -5,12 +5,14 @@ import link.sudy.orokseg.model.Event.EventRef;
 import link.sudy.orokseg.model.Medium.MediumRef;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
+import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter(AccessLevel.PROTECTED)
 @AllArgsConstructor
+@Data
 public class Family {
 
   private String handle;

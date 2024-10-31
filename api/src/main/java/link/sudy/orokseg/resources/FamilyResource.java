@@ -1,6 +1,7 @@
 package link.sudy.orokseg.resources;
 
 import link.sudy.orokseg.model.Family;
+import link.sudy.orokseg.model.FamilyTree;
 import link.sudy.orokseg.serviices.FamilyService;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -38,5 +39,10 @@ public class FamilyResource {
   @GetMapping("/byHandle/{handle}")
   public Family getByHandle(@PathVariable String handle) {
     return familyService.getFamilyByHandle(handle).orElseThrow();
+  }
+
+  @GetMapping("/{id}/tree")
+  public FamilyTree getTree(@PathVariable String id, @RequestParam(required = false, defaultValue = "3") final Integer up, @RequestParam(required = false, defaultValue = "3") final Integer down) {
+    return familyService.getFamilyTree(id, up, down).orElseThrow();
   }
 }
